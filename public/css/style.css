@@ -120,3 +120,18 @@ footer {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
 }
+
+figure {
+  text-align: center;
+  margin: 30px 0;
+}
+
+figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+figcaption {
+  font-size: 0.9rem;
+  color: #555;
+}

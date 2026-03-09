@@ -14,11 +14,172 @@
     <%- include('partials/header') %>
 
         <main>
-            <h1>Exploratory Data Analysis</h1>
-            <section>
-                <p>Content for Exploratory Data Analysis will go here.</p>
-            </section>
-        </main>
+    <h1>Exploratory Data Analysis</h1>
+
+    <section>
+        <h2>1. Dataset Overview</h2>
+        <p>
+            The data were collected through API access from two primary sources. From Federal Reserve
+            Economic Data (FRED), we obtained the unemployment rate, inflation rate, federal funds
+            interest rate, and the U.S. recession indicator. From Yahoo Finance, we collected financial
+            market indicators including the S&P 500 index, the VIX volatility index, and gold prices.
+        </p>
+
+        <p>
+            The analysis primarily uses data beginning in 1968 for unemployment, inflation, interest
+            rates, and the S&P 500 index. However, VIX and gold price data are only available starting
+            from 1990. As a result, analyses involving these two variables are restricted to the period
+            from 1990 onward.
+        </p>
+    </section>
+
+    <section>
+        <h2>2. Data Cleaning and Preparation</h2>
+        <p>
+            The recession indicator is recorded monthly and serves as the target variable for this
+            analysis. Because the original datasets were reported at different frequencies including
+            daily, monthly, and yearly, each dataset was converted to a consistent monthly frequency
+            using end-of-month values.
+        </p>
+
+        <p>
+            Two primary dataframes were constructed. The first includes unemployment, inflation,
+            interest rates, and the recession indicator. The second includes financial indicators
+            including the S&P 500, VIX, and gold prices beginning in 1990. Rows with missing values
+            were removed to ensure aligned observations.
+        </p>
+
+        <p>
+            The final cleaned dataset extends through 2024, and no duplicate or inconsistent records
+            were identified.
+        </p>
+    </section>
+
+    <section>
+        <h2>3. Summary Statistics and Normalization</h2>
+
+        <p>
+            The dataset contains variables measured on very different scales. For example, the S&P 500
+            is measured in large index values, while unemployment and inflation are measured in
+            percentages. Direct comparison between these variables would therefore be misleading.
+
+            To ensure fair comparison, all indicators were normalized using Z-score normalization, 
+            which transforms each variable to have a mean of zero and a standard deviation of one. 
+            This allows each indicator to be interpreted relative to its own historical average and variability, 
+            preventing larger-scale variables from dominating the visualizations.
+        </p>
+
+        <p>
+            A correlation heatmap was also created to examine the relationships between all economic and financial indicators.
+        </p>
+
+        <figure>
+            <img src="\images\correlation-of-financial-economic-indicator.png" alt="Correlation heatmap">
+            <figcaption>Figure 1. Correlation heatmap of economic and financial indicators.</figcaption>
+        </figure>
+
+        <p>
+            Based on the heatmap, we observe that inflation and interest rates have a strong positive correlation (0.69). 
+            This is because central banks raise interest rates to control rising inflation. When inflation increases, 
+            the Federal Reserve typically increases rates to reduce spending and slow price growth. The S&P 500 has a negative 
+            correlation with interest rates (-0.46). Higher interest rates increase borrowing costs for companies and reduce 
+            future earnings expectations, which can lower stock prices. The S&P 500 also has a negative correlation with unemployment 
+            (-0.37) and positive correlation with gold (0.41).
+        </p>
+
+        <p>
+            Overall, while the correlations are moderate rather than strong, they reflect logical economic relationships between monetary policy, 
+            economic conditions, and financial markets.
+        </p>
+    </section>
+
+    <section>
+        <h2>4. Visualization Analysis</h2>
+
+        <p>
+            To better understand indicator behavior around recession periods, two normalized line
+            graphs were created. The first graph includes unemployment, inflation, and interest rates,
+            while the second graph includes the S&P 500, VIX, and gold prices.
+        </p>
+
+        <figure>
+            <img src="\images\economic-indicators-time-series-plot.png" alt="Economic indicators graph">
+            <figcaption>Figure 2. Normalized trends of unemployment, inflation, and interest rates.</figcaption>
+        </figure>
+
+        <figure>
+            <img src="\images\financial-indicators-time-series-plot.png" alt="Financial indicators graph">
+            <figcaption>Figure 3. Normalized trends of S&P 500, VIX, and gold prices.</figcaption>
+        </figure>
+
+        <p>
+            The long-term line graphs show that during the first four recessions (1970s–early 1980s), 
+            inflation and interest rates increased before recession. In contrast, during the later 
+            recessions (2001, 2008, 2020), both generally declined before recession, indicating that patterns 
+            vary across economic periods. Unemployment typically remains stable before recession and rises afterward, 
+            suggesting it behaves as a lagging indicator. Since line graphs do not measure the size of changes, heatmaps 
+            were created to show percentage changes 3, 6, 12, and 24 months before each recession.
+
+        </p>
+
+        <figure>
+            <img src="\images\indicator-changes-heatmap-1968–2024.png" alt="Indicator heatmap 1968">
+            <figcaption>Figure 4. Indicator percentage changes before recessions (1968–2024).</figcaption>
+        </figure>
+
+        <p>
+            The heatmap covering 1968 to 2024 suggests the following:
+        </p>
+
+        <ul>
+            <li>Unemployment: Typically rises after recession begins, not before. This supports the idea that it is not a strong early warning indicator.</li>
+            <li>Inflation: Shows a mixed pattern, with no consistent direction before recessions.</li>
+            <li>Interest Rate: Behavior varies across periods because it reflects policy responses rather than direct economic stress.</li>
+            <li>S&P 500: Often declines 3 to 6 months before recession. However, 12- and 24-month patterns are less consistent.</li>
+        </ul>
+
+        <p>
+            These results suggest that recession patterns depend on the underlying cause of the downturn.
+        </p>
+
+        <figure>
+            <img src="\images\indicator-changes-heatmap-1990–2024.png" alt="Indicator heatmap 1990">
+            <figcaption>Figure 5. Indicator percentage changes before recessions (1990–2024).</figcaption>
+        </figure>
+
+        <p>
+            Since the 1990 recession began in August 1990 and financial data started in January 1990, it is excluded from the 12- and 24-month windows due to insufficient prior data.
+            From this heatmap we have observed the followings:
+        </p>
+
+        <ul>
+            <li>S&P 500: Gradually decreases before most recessions.</li>
+            <li>VIX: Spikes sharply as recession approaches, especially in the short term.</li>
+            <li>Gold: Does not show a consistent pattern across recessions.</li>
+        </ul>
+
+        <p>
+            These findings indicate that market-based indicators may provide earlier signals than macroeconomic variables.
+        </p>
+
+    </section>
+
+    <section>
+        <h2>5. Preliminary Insights and Hypothesis Formation</h2>
+
+        <ul>
+            <li>The S&P 500 often declines 3 to 6 months before recession.</li>
+            <li>VIX tends to increase sharply near recession onset.</li>
+            <li>Inflation and interest rate patterns vary across economic periods.</li>
+        </ul>
+
+        <p>
+            These results suggest that financial market indicators, particularly stock performance and
+            volatility, may provide stronger short-term signals of upcoming recessions than traditional
+            macroeconomic indicators.
+        </p>
+    </section>
+</main>
 
         <%- include('partials/footer') %>
 </body>
