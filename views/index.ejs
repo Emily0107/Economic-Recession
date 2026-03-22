@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <%= title %> | Forecasting Recessions
+        <%= title %> | Analyzing Early Economic and Financial Indicators for Recession in the U.S
     </title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -15,29 +15,84 @@
 
         <main>
             <div class="hero">
-                <h1>Forecasting Recessions in the U.S. Economy</h1>
+                <h1>Analyzing Early Economic and Financial Indicators for Recession in the U.S</h1>
                 <p>Group ID: 5</p>
                 <p>Members: May Sabai, Emily Lu</p>
             </div>
 
             <section id="project-summary">
                 <h2>Project Summary</h2>
-                <p>
-                    This project aims to predict economic recessions in the United States using various economic
-                    indicators and machine learning models.
-                    [Add more detailed summary here]
-                </p>
+                <p>Recessions have been a recurring part of U.S. economic history—from the 1973–1975 energy crisis to
+                    the 2007–2009 housing collapse and the 2020 COVID-19 downturn. These events have wide-reaching
+                    impacts on employment, housing affordability, financial markets, and overall economic stability.
+                    Despite their significance, recessions are often only recognized after substantial damage has
+                    already occurred.</p>
+                <p>This project aims to identify early warning signs of recessions by analyzing historical U.S. economic
+                    and financial data from 1960 to 2024. By combining government economic data with financial market
+                    indicators, the analysis seeks to provide a more comprehensive and less biased view of economic
+                    conditions.</p>
+                <p>Key variables include unemployment rates, GDP growth, inflation, housing prices, the federal funds
+                    rate, stock market performance (S&P 500), market volatility (VIX), and the yield curve slope. These
+                    indicators have been widely studied and are known to reflect different aspects of the economy.</p>
+                <p>The project begins with exploratory data analysis to uncover recurring patterns that appear in the
+                    months leading up to past recessions (typically 3–12 months prior). It then applies machine learning
+                    techniques—such as logistic regression and time-series modeling—to test whether these patterns
+                    consistently signal upcoming downturns.</p>
+                <p>The goal is to better understand whether recessions can be anticipated earlier, potentially helping
+                    individuals, businesses, and policymakers make more informed decisions.</p>
             </section>
 
             <div class="content-grid">
                 <section id="broader-impacts">
                     <h2>Broader Impacts</h2>
-                    <p>[Content about broader impacts of the study]</p>
+                    <p>Economic downturns can disrupt careers, reduce incomes, and create financial challenges,
+                        especially for young adults and financially vulnerable communities. This project aims to improve
+                        public awareness of the early warning signs that often appear before recessions, helping
+                        individuals and organizations make more informed financial decisions. By identifying consistent
+                        patterns in macroeconomic and financial indicators, the research can support better preparation
+                        before economic conditions significantly decline.</p>
+                    <p>For students and early-career professionals, understanding recession signals can encourage
+                        proactive financial behaviors, such as building emergency savings, diversifying income sources,
+                        and managing debt responsibly. Small businesses may benefit from earlier strategic adjustments
+                        in hiring, inventory, or investment planning. Investors and financial institutions could also
+                        use clearer signals to improve risk management and portfolio allocation decisions.</p>
+                    <p>From a policy perspective, identifying reliable early indicators may contribute to more timely
+                        and targeted economic responses. In addition, this project promotes data literacy by
+                        demonstrating how historical economic data and machine learning methods can be applied to
+                        real-world challenges. By making complex economic trends more understandable, the research
+                        supports stronger financial preparedness and long-term economic resilience across communities.
+                    </p>
                 </section>
 
                 <section id="data-sources">
                     <h2>Data Sources</h2>
-                    <p>[Details about data sources (FRED, etc.)]</p>
+                    <ol>
+                        <li>U.S. Bureau of Labor Statistics, <a href="https://fred.stlouisfed.org/series/UNRATE"
+                                target="_blank" style="color: inherit; text-decoration: underline;">Unemployment
+                                Rate</a> [UNRATE], retrieved from FRED, Federal Reserve Bank of St. Louis, February 4,
+                            2026.</li>
+                        <li>World Bank, <a href="https://fred.stlouisfed.org/series/FPCPITOTLZGUSA" target="_blank"
+                                style="color: inherit; text-decoration: underline;">Inflation, consumer prices for the
+                                United States</a> [FPCPITOTLZGUSA], retrieved from FRED, Federal Reserve Bank of St.
+                            Louis, February 4, 2026.</li>
+                        <li>Board of Governors of the Federal Reserve System, <a
+                                href="https://finance.yahoo.com/quote/%5EGSPC/" target="_blank"
+                                style="color: inherit; text-decoration: underline;">Federal Funds Effective Rate</a>
+                            [FEDFUNDS], retrieved from FRED, Federal Reserve Bank of St. Louis.</li>
+                        <li>Yahoo Finance, <a href="https://finance.yahoo.com/quote/%5ESPX/history/" target="_blank"
+                                style="color: inherit; text-decoration: underline;">S&P 500 Index Historical Data</a>
+                            [^SPX], retrieved from Yahoo Finance.</li>
+                        <li>Yahoo Finance, <a href="https://finance.yahoo.com/quote/%5EVIX/" target="_blank"
+                                style="color: inherit; text-decoration: underline;">CBOE Volatility Index (^VIX)
+                                Historical Data</a> [^VIX], retrieved from Yahoo Finance.</li>
+                        <li>Yahoo Finance, <a href="https://finance.yahoo.com/quote/GOLD/" target="_blank"
+                                style="color: inherit; text-decoration: underline;">Gold Historical Data</a>
+                            [GOLD], retrieved from Yahoo Finance.</li>
+                        <li>Federal Reserve Bank of St. Louis, <a href="https://fred.stlouisfed.org/series/T10Y3M"
+                                target="_blank" style="color: inherit; text-decoration: underline;">10-Year Treasury
+                                Constant Maturity Minus 3-Month Treasury Constant Maturity</a> [T10Y3M], retrieved from
+                            FRED, Federal Reserve Bank of St. Louis.</li>
+                    </ol>
                 </section>
             </div>
 
