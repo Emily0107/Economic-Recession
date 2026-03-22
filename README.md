@@ -1,13 +1,19 @@
-# Economic-Recession 
+# Analyzing Early Economic and Financial Indicators for Recession in the U.S
 **Team Members:**  
 - May Sabai 
 - Emily Lu
 
 ---
 ## Overview
-Economic recessions cause significant disruptions to employment, housing, and income, yet they are often recognized only after major damage has occurred. This project proposes an analysis of U.S. economic data from **1960–2024** to identify patterns and early warning signals associated with recessions.
+Recessions have been a recurring part of U.S. economic history—from the 1973–1975 energy crisis to the 2007–2009 housing collapse and the 2020 COVID-19 downturn. These events have wide-reaching impacts on employment, housing affordability, financial markets, and overall economic stability. Despite their significance, recessions are often only recognized after substantial damage has already occurred.
 
-Using official data from **Federal Reserve Economic Data (FRED)** and recession dates from the **National Bureau of Economic Research (NBER)**, we plan to examine how key economic indicators behave before, during, and after recessions.
+This project aims to identify early warning signs of recessions by analyzing historical U.S. economic and financial data from 1960 to 2024. By combining government economic data with financial market indicators, the analysis seeks to provide a more comprehensive and less biased view of economic conditions.
+
+Key variables include unemployment rates, GDP growth, inflation, housing prices, the federal funds rate, stock market performance (S&P 500), market volatility (VIX), and the yield curve slope. These indicators have been widely studied and are known to reflect different aspects of the economy.
+
+The project begins with exploratory data analysis to uncover recurring patterns that appear in the months leading up to past recessions (typically 3–12 months prior). It then applies machine learning techniques—such as logistic regression and time-series modeling—to test whether these patterns consistently signal upcoming downturns.
+
+The goal is to better understand whether recessions can be anticipated earlier, potentially helping individuals, businesses, and policymakers make more informed decisions.
 
 ---
 ## Proposed Data Sources
