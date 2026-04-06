@@ -16,7 +16,156 @@
         <main>
             <h1>Analysis Methods</h1>
             <section>
-                <p>Content for Analysis Methods will go here.</p>
+                <h2>1. Methodology</h2>
+                <h3>1.1 Overview</h3>
+                <p>The analysis systematically measures how closely current U.S. economic indicator trends resemble the
+                    pre-recession periods of eight historical U.S. recessions. Rather than relying on visual inspection
+                    alone, two quantitative metrics are computed for every combination of recession, indicator, and time
+                    window — producing a composite similarity score from 0 to 100.</p>
+
+                <br>
+                <h3>1.2. Indicators</h3>
+                <p>Six key economic indicators were selected to capture different facets of the economy:</p>
+                <ul>
+                    <li><strong>Unemployment</strong> — the unemployment rate (seasonally adjusted)</li>
+                    <li><strong>Interest rates</strong> — the federal funds rate (monthly average)</li>
+                    <li><strong>Oil prices</strong> — the price of West Texas Intermediate crude oil (monthly average)
+                    </li>
+                    <li><strong>SP500</strong> — the S&P 500 index (monthly close)</li>
+                    <li><strong>VIX</strong> — the CBOE Volatility Index (daily close, monthly average)</li>
+                    <li><strong>Gold</strong> — the price of gold (monthly close)</li>
+                </ul>
+                <br>
+                <h3>1.3 Time Windows Compared</h3>
+                <p>For each recession, indicator data was extracted for six look-back windows ending at the month before
+                    the recession officially began. The same windows were applied to current data ending March 2026.
+                    This allows a like-for-like comparison of how each indicator behaved at equivalent points in time
+                    before each historical recession versus today.</p>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Window</th>
+                            <th>Interpretation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1 Month</strong></td>
+                            <td>Very near-term momentum — the most recent trend direction</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2 Months</strong></td>
+                            <td>Short-term trend — captures early shifts in indicator direction</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3 Months</strong></td>
+                            <td>Quarter-level trend — most useful for fast-moving indicators (VIX, Oil, SP500)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6 Months</strong></td>
+                            <td>Medium-term trend — captures policy-response lags (e.g. Fed rate decisions)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1 Year</strong></td>
+                            <td>One-year arc — most useful for slow-moving indicators (Unemployment, Interest)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2 Years</strong></td>
+                            <td>Full cycle view — captures the macro environment leading into a recession</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br>
+                <h3>1.4 Metric 1 — Pearson Correlation</h3>
+                <p>Pearson correlation measures the degree to which two time series move in the same direction over the
+                    same period. It ranges from -1 to +1, where:</p>
+                <ul>
+                    <li><strong>+1.0</strong> means the two series move in perfect lockstep — when one rises, the other
+                        rises by a proportional amount.</li>
+                    <li><strong>0.0</strong> means there is no linear relationship between the two series — movements
+                        are unrelated.</li>
+                    <li><strong>-1.0</strong> means the series move in exactly opposite directions.</li>
+                </ul>
+                <p>In the context of this analysis, a Pearson score close to +1 indicates that the current indicator
+                    trend is moving in the same direction and with the same relative intensity as the pre-recession
+                    trend for a given historical recession. This is particularly informative for indicators with clear
+                    directional signals — for example, whether unemployment is rising or falling — but it does not
+                    account for timing differences or shape nuances within the window.</p>
+                <p>The raw Pearson value is rescaled from [-1, +1] to [0, 100] to make it compatible with the composite
+                    score, using the formula: <code>Pearson Score = (r + 1) / 2 × 100</code>.</p>
+
+                <br>
+                <h3>1.5 Metric 2 — Dynamic Time Warping (DTW)</h3>
+                <p>Dynamic Time Warping (DTW) is a shape-matching algorithm that measures how similar two time series
+                    are in terms of their overall pattern, even when they are slightly offset in time. Unlike Pearson
+                    correlation, DTW can detect that two series have the same general trajectory even if one is leading
+                    or lagging the other by a few months — a common feature of economic indicator data.</p>
+                <p>Before computing DTW, each indicator series is min-max normalised to the range [0, 1]. This
+                    eliminates scale differences between indicators (e.g. Oil prices in the hundreds vs Unemployment in
+                    single digits) so that the shape comparison is fair and scale-invariant.</p>
+                <p>DTW returns a distance value — lower distances mean the shapes are more similar. This is converted to
+                    a similarity score [0, 100] by dividing the raw distance by the theoretical maximum distance for
+                    sequences of that length, then inverting the result:
+                    <code>DTW Score = (1 - distance / max_distance) × 100</code>.
+                </p>
+
+                <br>
+                <h3>1.6 Composite Score</h3>
+                <p>The composite score is an equal-weighted average of the Pearson and DTW scores:
+                    <code>Composite = 0.5 × Pearson Score + 0.5 × DTW Score</code>. A composite score of 60 or above is
+                    flagged as a 'notable match' in this analysis. This threshold was chosen based on the distribution
+                    of scores across all comparisons — the majority of scores fall below 60, making higher values
+                    meaningful.
+                </p>
+
+                <br>
+                <h3>1.7 Recessions Analysed</h3>
+                <p>Eight U.S. recessions were included, covering a range of economic triggers:</p>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Recession</th>
+                            <th>Primary Cause</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1969 Vietnam/Fed Tightening</strong></td>
+                            <td>Post-war spending + aggressive Fed rate hikes to control inflation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1973 Oil Embargo Stagflation</strong></td>
+                            <td>OPEC oil embargo caused energy crisis and stagflation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1980 Volcker Inflation Fight</strong></td>
+                            <td>Paul Volcker's Fed sharply raised rates to break the inflation cycle</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1981 High Interest Rates</strong></td>
+                            <td>Continuation of Volcker policy; deepest post-WWII unemployment at the time</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1990 Gulf War Oil Shock</strong></td>
+                            <td>Gulf War oil shock combined with the savings and loan crisis</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2001 Dot-Com Bust</strong></td>
+                            <td>Collapse of overvalued tech sector, stock market crash, 9/11</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2008 Great Recession</strong></td>
+                            <td>Housing bubble collapse, banking system failure, credit freeze</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2020 COVID Pandemic</strong></td>
+                            <td>Sudden global pandemic-driven economic shutdown</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
         </main>
 

@@ -135,3 +135,26 @@ figcaption {
   font-size: 0.9rem;
   color: #555;
 }
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1rem;
+  text-align: left;
+}
+
+table th, table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+table th {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+table tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
