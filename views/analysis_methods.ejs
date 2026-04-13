@@ -78,50 +78,44 @@
                 </table>
 
                 <br>
-                <h3>1.4 Metric 1 — Pearson Correlation</h3>
-                <p>Pearson correlation measures the degree to which two time series move in the same direction over the
-                    same period. It ranges from -1 to +1, where:</p>
+                <h3>1.4 Metric 1 — Spearman Rank Correlation</h3>
+                <p>Spearman Rank Correlation measures the monotonic relationship between two sequences. Unlike Pearson
+                    correlation which looks for strict linear relationships, Spearman checks whether the values go up
+                    and down together, even if the scale or rate of change varies. The raw output is a coefficient
+                    from -1 to +1, where:</p>
                 <ul>
-                    <li><strong>+1.0</strong> means the two series move in perfect lockstep — when one rises, the other
-                        rises by a proportional amount.</li>
-                    <li><strong>0.0</strong> means there is no linear relationship between the two series — movements
-                        are unrelated.</li>
-                    <li><strong>-1.0</strong> means the series move in exactly opposite directions.</li>
+                    <li><strong>+1.0</strong> means perfect positive correlation — the two series move in the exact
+                        same direction at the same time.</li>
+                    <li><strong>0.0</strong> means no monotonic relationship — the movements are unrelated.</li>
+                    <li><strong>-1.0</strong> means perfect inverse correlation — the series move in completely
+                        opposite directions.</li>
                 </ul>
-                <p>In the context of this analysis, a Pearson score close to +1 indicates that the current indicator
-                    trend is moving in the same direction and with the same relative intensity as the pre-recession
-                    trend for a given historical recession. This is particularly informative for indicators with clear
-                    directional signals — for example, whether unemployment is rising or falling — but it does not
-                    account for timing differences or shape nuances within the window.</p>
-                <p>The raw Pearson value is rescaled from [-1, +1] to [0, 100] to make it compatible with the composite
-                    score, using the formula: <code>Pearson Score = (r + 1) / 2 × 100</code>.</p>
+                <p>In the context of this analysis, Spearman is used because economic indicators often move together
+                    without following a perfectly linear relationship. For example, unemployment may broadly rise
+                    alongside interest rates before a recession, but not at a constant proportional rate. Spearman
+                    captures this kind of directional similarity more robustly than Pearson.</p>
+                <p>The raw Spearman value is rescaled from [-1, +1] to [0, 100] to make it compatible with the
+                    composite score, using the formula: <code>Spearman Score = (ρ + 1) / 2 × 100</code>.</p>
+                <p>A high score (near 100) indicates the two time series move in the exact same direction at the same
+                    time. A low score (near 0) indicates the series move in completely opposite directions, showing
+                    no similarity in trend.</p>
 
                 <br>
                 <h3>1.5 Metric 2 — Dynamic Time Warping (DTW)</h3>
-                <p>Dynamic Time Warping (DTW) is a shape-matching algorithm that measures how similar two time series
-                    are in terms of their overall pattern, even when they are slightly offset in time. Unlike Pearson
-                    correlation, DTW can detect that two series have the same general trajectory even if one is leading
-                    or lagging the other by a few months — a common feature of economic indicator data.</p>
-                <p>Before computing DTW, each indicator series is min-max normalised to the range [0, 1]. This
-                    eliminates scale differences between indicators (e.g. Oil prices in the hundreds vs Unemployment in
-                    single digits) so that the shape comparison is fair and scale-invariant.</p>
-                <p>DTW returns a distance value — lower distances mean the shapes are more similar. This is converted to
-                    a similarity score [0, 100] by dividing the raw distance by the theoretical maximum distance for
-                    sequences of that length, then inverting the result:
+                <p>Dynamic Time Warping (DTW) measures how similar two curves look, even if one is slightly
+                    shifted in time. For example, if unemployment spiked one month later in a past recession compared
+                    to today, DTW can still recognise that the overall shape is the same.</p>
+                <p>Before comparing, each series is scaled to a common range of [0, 1] so that indicators with very
+                    different units (e.g. Oil in dollars vs Unemployment as a percentage) can be compared fairly.</p>
+                <p>DTW produces a distance — a smaller distance means the two curves look more alike. We convert this
+                    into a score from 0 to 100 where higher means more similar:
                     <code>DTW Score = (1 - distance / max_distance) × 100</code>.
                 </p>
+                <p>A high score (near 100) means the shapes of the two series closely match. A low score means the
+                    shapes are very different.</p>
 
                 <br>
-                <h3>1.6 Composite Score</h3>
-                <p>The composite score is an equal-weighted average of the Pearson and DTW scores:
-                    <code>Composite = 0.5 × Pearson Score + 0.5 × DTW Score</code>. A composite score of 60 or above is
-                    flagged as a 'notable match' in this analysis. This threshold was chosen based on the distribution
-                    of scores across all comparisons — the majority of scores fall below 60, making higher values
-                    meaningful.
-                </p>
-
-                <br>
-                <h3>1.7 Recessions Analysed</h3>
+                <h3>1.6 Recessions Analysed</h3>
                 <p>Eight U.S. recessions were included, covering a range of economic triggers:</p>
 
                 <table class="table">

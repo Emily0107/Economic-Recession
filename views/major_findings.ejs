@@ -15,13 +15,17 @@
 
         <main>
             <h1>Major Findings</h1>
+            <p>During the exploratory data analysis (EDA) phase, we observed that no single economic indicator
+                follows a consistent pattern before every recession. Each historical U.S. recession was triggered by
+                different factors — from oil shocks and aggressive Fed tightening to housing bubbles and a global
+                pandemic. Because of this, rather than looking for one universal warning sign, we compared the current
+                data (April 2024 – March 2026) for each of the six indicators against every pre-recession period across
+                six time windows to determine which past recession today's economy most closely resembles.</p>
             <section>
                 <h2>1. Analysis Findings</h2>
                 <h3>1.1 Overall Recession Similarity Ranking</h3>
-                <p>The table below ranks all eight recessions by their average composite similarity score across all
-                    <strong>six
-                        indicators</strong> and all <strong>six time windows</strong> — 36 comparisons per recession,
-                    288 comparisons in total.
+                <p>The two bar graphs below rank all eight recessions by their average similarity score across all
+                    <strong>six indicators</strong> and all <strong>six time windows</strong>.
                 </p>
 
                 <figure>
@@ -31,14 +35,16 @@
 
                 <p>Two recessions stand out as statistically notable matches to the current economic environment:</p>
                 <ul>
-                    <li>The <strong>1981 High Interest Rates</strong> recession (59.4) narrowly missed the notable
-                        threshold, driven strongly by the unemployment and SP500 patterns.</li>
-                    <li>The <strong>2001 Dot-Com Bust</strong> (53.4) also showed meaningful similarity in VIX and SP500
-                        over short windows.</li>
+                    <li><strong>2008</strong> is the clearest match to today, with the highest similarity in both
+                        measures, followed by <strong>2020</strong> as the second closest.</li>
+                    <li>Most other recessions show only moderate similarity (scores mostly between 40–59), meaning
+                        today’s conditions are not strongly aligned with them.</li>
+                    <li>DTW scores are consistently higher than Spearman, suggesting the overall patterns/trends look
+                        similar, even if the exact relationships between indicators are weaker.</li>
                 </ul>
 
                 <br>
-                <h3>1.3 Similarity by Time Window (averaged across all indicators)</h3>
+                <h3>1.2 Similarity by Time Window (averaged across all indicators)</h3>
                 <figure>
                     <img src="/images/Major%20findings/average-across-indicators.png" alt="Similarity by Time Window">
                 </figure>
@@ -54,7 +60,7 @@
                     recessions, making it the most informative timeframe for comparison.</p>
 
                 <br>
-                <h3>1.4 Similarity by Economic Indicator (averaged across all time windows)</h3>
+                <h3>1.3 Similarity by Economic Indicator (averaged across all time windows)</h3>
                 <figure>
                     <img src="/images/Major%20findings/average-across-time-windows.png"
                         alt="Similarity by Economic Indicator">
@@ -81,46 +87,82 @@
                 <h4>1.5.1. Unemployment:</h4>
                 <p><strong>Unemployment</strong> tracks the 2008 recession most closely (score: 78), with a rising
                     trend in recent months mirroring the pre-crisis buildup seen in both 2008 and 1969.</p>
-                <figure>
-                    <img src="/images/Major%20findings/trend_unemployment.png" alt="Trend Unemployment">
-                </figure>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/Unemployment.png" alt="Trend Unemployment">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/Unemployment.png" alt="Trend Unemployment">
+                    </figure>
+                </div>
 
                 <h4>1.5.2. Interest rates:</h4>
                 <p><strong>Interest rates</strong> are the standout signal — scoring 96 against the 2020 COVID
                     Pandemic and 91 against 2008, with a sharp decline from peak levels closely replicating both
                     pre-recession rate-cut cycles.</p>
-                <figure>
-                    <img src="/images/Major%20findings/trend_interest.png" alt="Trend Interest Rates">
-                </figure>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/Interest.png" alt="Trend Interest Rates">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/Interest.png" alt="Trend Interest Rates">
+                    </figure>
+                </div>
 
                 <h4>1.5.3. Oil prices:</h4>
                 <p><strong>Oil prices</strong> show the weakest match overall (best score: 75 vs 2008), with
                     current prices remaining subdued and not replicating the sharp spikes seen historically.</p>
-                <figure>
-                    <img src="/images/Major%20findings/trend_oil.png" alt="Trend Oil Prices">
-                </figure>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/Oil.png" alt="Trend Oil Prices">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/Oil.png" alt="Trend Oil Prices">
+                    </figure>
+                </div>
 
                 <h4>1.5.4. SP500:</h4>
                 <p><strong>SP500</strong> mirrors both the 1980 Volcker period and 2008 (both score 86), showing a
                     prolonged upward climb that historically preceded a sharp correction.</p>
-                <figure>
-                    <img src="/images/Major%20findings/trend_sp500.png" alt="Trend SP500">
-                </figure>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/SP500.png" alt="Trend SP500">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/SP500.png" alt="Trend SP500">
+                    </figure>
+                </div>
 
                 <h4>1.5.5. VIX:</h4>
                 <p><strong>VIX</strong> aligns with the 2001 Dot-Com Bust (74), with a recent spike at the zero
                     mark suggesting rising market anxiety similar to the lead-up to that crash.</p>
-                <figure>
-                    <img src="/images/Major%20findings/trend_vix.png" alt="Trend VIX">
-                </figure>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/VIX.png" alt="Trend VIX">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/VIX.png" alt="Trend VIX">
+                    </figure>
+                </div>
 
                 <h4>1.5.6. Gold:</h4>
                 <p><strong>Gold</strong> is the most alarming signal — scoring 92 against 2020 and 90 against 2008
                     — with a steep, sustained rise in the final months almost perfectly replicating both
                     pre-recession safe-haven surges.</p>
-                <figure>
-                    <img src="/images/Major%20findings/trend_gold.png" alt="Trend Gold">
-                </figure>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/Gold.png" alt="Trend Gold">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/Gold.png" alt="Trend Gold">
+                    </figure>
+                </div>
                 <p><strong>Bottom line:</strong> Interest rates, gold, and equities collectively paint the most
                     consistent pre-recession picture, with the 2008 Great Recession emerging as the single strongest
                     historical analogue across the broadest set of indicators.</p>
@@ -133,132 +175,124 @@
                             <th>Recession</th>
                             <th>Indicator</th>
                             <th>Window</th>
-                            <th>Pearson</th>
+                            <th>Spearman</th>
                             <th>DTW</th>
-                            <th>Score</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr style="background-color: #fffacd;">
                             <td>2020 COVID Pandemic</td>
                             <td>Gold</td>
-                            <td>1 Year</td>
-                            <td>95.8</td>
-                            <td>87.7</td>
-                            <td>91.7</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>Gold</td>
-                            <td>6 Months</td>
-                            <td>95.9</td>
-                            <td>88.5</td>
-                            <td>92.2</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>Gold</td>
                             <td>3 Months</td>
-                            <td>98.1</td>
-                            <td>85</td>
-                            <td>91.6</td>
-                        </tr>
-                        <tr>
-                            <td>1990 Gulf War Oil Shock</td>
-                            <td>Gold</td>
-                            <td>3 Months</td>
-                            <td>99.5</td>
-                            <td>92.5</td>
-                            <td>96</td>
-                        </tr>
-                        <tr style="background-color: #fffacd;">
-                            <td>2020 COVID Pandemic</td>
-                            <td>Interest</td>
-                            <td>1 Year</td>
-                            <td>99.4</td>
-                            <td>93</td>
-                            <td>96.2</td>
-                        </tr>
-                        <tr style="background-color: #fffacd;">
-                            <td>2020 COVID Pandemic</td>
-                            <td>Interest</td>
-                            <td>6 Months</td>
-                            <td>97.2</td>
-                            <td>87.7</td>
-                            <td>92.5</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>Interest</td>
-                            <td>1 Year</td>
-                            <td>92.3</td>
-                            <td>89.7</td>
-                            <td>91</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>Interest</td>
-                            <td>6 Months</td>
-                            <td>96.3</td>
-                            <td>90.9</td>
-                            <td>93.6</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>SP500</td>
-                            <td>2 Years</td>
-                            <td>93.3</td>
-                            <td>92.5</td>
-                            <td>92.9</td>
+                            <td>100.0</td>
+                            <td>79.3</td>
                         </tr>
                         <tr style="background-color: #add8e6;">
                             <td>2008 Great Recession</td>
                             <td>SP500</td>
                             <td>3 Months</td>
-                            <td>99.2</td>
+                            <td>100.0</td>
                             <td>90.5</td>
-                            <td>94.9</td>
-                        </tr>
-                        <tr>
-                            <td>1981 High Interest Rates</td>
-                            <td>SP500</td>
-                            <td>2 Years</td>
-                            <td>91.4</td>
-                            <td>89.7</td>
-                            <td>90.6</td>
-                        </tr>
-                        <tr>
-                            <td>1981 High Interest Rates</td>
-                            <td>SP500</td>
-                            <td>3 Months</td>
-                            <td>98</td>
-                            <td>87.5</td>
-                            <td>92.8</td>
                         </tr>
                         <tr>
                             <td>2001 Dot-Com Bust</td>
                             <td>SP500</td>
                             <td>3 Months</td>
-                            <td>98.9</td>
+                            <td>100.0</td>
                             <td>88.7</td>
-                            <td>93.8</td>
                         </tr>
-                        <tr style="background-color: #fffacd;">
-                            <td>2020 COVID Pandemic</td>
-                            <td>VIX</td>
+                        <tr>
+                            <td>1990 Gulf War Oil Shock</td>
+                            <td>Gold</td>
                             <td>3 Months</td>
-                            <td>99.1</td>
-                            <td>90</td>
-                            <td>94.6</td>
+                            <td>100.0</td>
+                            <td>92.5</td>
                         </tr>
                         <tr style="background-color: #add8e6;">
                             <td>2008 Great Recession</td>
                             <td>VIX</td>
                             <td>3 Months</td>
-                            <td>98.3</td>
+                            <td>100.0</td>
                             <td>85.5</td>
-                            <td>91.9</td>
                         </tr>
+                        <tr style="background-color: #add8e6;">
+                            <td>2008 Great Recession</td>
+                            <td>Gold</td>
+                            <td>3 Months</td>
+                            <td>100.0</td>
+                            <td>85.0</td>
+                        </tr>
+                        <tr style="background-color: #fffacd;">
+                            <td>2020 COVID Pandemic</td>
+                            <td>VIX</td>
+                            <td>3 Months</td>
+                            <td>100.0</td>
+                            <td>90.0</td>
+                        </tr>
+                        <tr style="background-color: #add8e6;">
+                            <td>2008 Great Recession</td>
+                            <td>Interest</td>
+                            <td>6 Months</td>
+                            <td>97.1</td>
+                            <td>90.9</td>
+                        </tr>
+                        <tr style="background-color: #fffacd;">
+                            <td>2020 COVID Pandemic</td>
+                            <td>Interest</td>
+                            <td>1 Year</td>
+                            <td>96.3</td>
+                            <td>93.0</td>
+                        </tr>
+                        <tr style="background-color: #fffacd;">
+                            <td>2020 COVID Pandemic</td>
+                            <td>Gold</td>
+                            <td>1 Year</td>
+                            <td>93.4</td>
+                            <td>87.7</td>
+                        </tr>
+                        <tr>
+                            <td>1969 Vietnam/Fed Tightening</td>
+                            <td>Unemployment</td>
+                            <td>3 Months</td>
+                            <td>93.3</td>
+                            <td>71.1</td>
+                        </tr>
+                        <tr>
+                            <td>1990 Gulf War Oil Shock</td>
+                            <td>Unemployment</td>
+                            <td>3 Months</td>
+                            <td>93.3</td>
+                            <td>71.1</td>
+                        </tr>
+                        <tr>
+                            <td>1973 Oil Embargo Stagflation</td>
+                            <td>Unemployment</td>
+                            <td>3 Months</td>
+                            <td>93.3</td>
+                            <td>71.1</td>
+                        </tr>
+                        <tr style="background-color: #add8e6;">
+                            <td>2008 Great Recession</td>
+                            <td>SP500</td>
+                            <td>2 Years</td>
+                            <td>91.8</td>
+                            <td>92.5</td>
+                        </tr>
+                        <tr style="background-color: #add8e6;">
+                            <td>2008 Great Recession</td>
+                            <td>Gold</td>
+                            <td>6 Months</td>
+                            <td>91.4</td>
+                            <td>88.5</td>
+                        </tr>
+                        <tr style="background-color: #fffacd;">
+                            <td>2020 COVID Pandemic</td>
+                            <td>Interest</td>
+                            <td>6 Months</td>
+                            <td>91.0</td>
+                            <td>87.7</td>
+                        </tr>
+
                     </tbody>
                 </table>
 
