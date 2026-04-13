@@ -79,6 +79,11 @@
                                 href="https://finance.yahoo.com/quote/%5EGSPC/" target="_blank"
                                 style="color: inherit; text-decoration: underline;">Federal Funds Effective Rate</a>
                             [FEDFUNDS], retrieved from FRED, Federal Reserve Bank of St. Louis.</li>
+                        <li>U.S. Energy Information Administration, <a
+                                href="https://fred.stlouisfed.org/series/DCOILWTICO" target="_blank"
+                                style="color: inherit; text-decoration: underline;">Crude Oil Prices: West Texas
+                                Intermediate (WTI)</a> [DCOILWTICO], retrieved from FRED, Federal Reserve Bank of
+                            St. Louis.</li>
                         <li>Yahoo Finance, <a href="https://finance.yahoo.com/quote/%5ESPX/history/" target="_blank"
                                 style="color: inherit; text-decoration: underline;">S&P 500 Index Historical Data</a>
                             [^SPX], retrieved from Yahoo Finance.</li>
@@ -88,17 +93,29 @@
                         <li>Yahoo Finance, <a href="https://finance.yahoo.com/quote/GOLD/" target="_blank"
                                 style="color: inherit; text-decoration: underline;">Gold Historical Data</a>
                             [GOLD], retrieved from Yahoo Finance.</li>
-                        <li>Federal Reserve Bank of St. Louis, <a href="https://fred.stlouisfed.org/series/T10Y3M"
-                                target="_blank" style="color: inherit; text-decoration: underline;">10-Year Treasury
-                                Constant Maturity Minus 3-Month Treasury Constant Maturity</a> [T10Y3M], retrieved from
-                            FRED, Federal Reserve Bank of St. Louis.</li>
                     </ol>
                 </section>
             </div>
 
             <section id="analysis">
                 <h2>Analysis</h2>
-                <p>[Brief overview of analysis]</p>
+                <a href="/eda#avg-trajectory" style="text-decoration: none; color: inherit;">
+                    <ul>
+                        <li>The S&P 500 often declines 3 to 6 months before recession.</li>
+                        <li>VIX tends to increase sharply near recession onset.</li>
+                        <li>Inflation and interest rate patterns vary across economic periods.</li>
+                    </ul>
+                    <div class="content-grid">
+                        <figure>
+                            <img src="images/EDA/average%20line%20graph%20economic%20indicator.png"
+                                alt="Average line graph economic indicator">
+                        </figure>
+                        <figure>
+                            <img src="images/EDA/average%20line%20graph%20financial%20indicator.png"
+                                alt="Average line graph financial indicator">
+                        </figure>
+                    </div>
+                </a>
             </section>
 
             <section id="machine-learning">
@@ -108,7 +125,55 @@
 
             <section id="major-findings">
                 <h2>Major Findings</h2>
-                <p>[Summary of major findings]</p>
+                <p>
+                    In compare current economic data (2024 - 2026) to past pre-recession periods,we have used two
+                    methods: Spearman correlation and Dynamic Time Warping (DTW).
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Spearman</th>
+                            <th>DTW</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Measurement focus</td>
+                            <td>Directional alignment of trends at each point in time</td>
+                            <td>Overall similarity in the shape of trends over time</td>
+                        </tr>
+                        <tr>
+                            <td>Score interpretation</td>
+                            <td>Higher values indicate stronger synchronization in movement</td>
+                            <td>Higher values indicate stronger similarity in pattern, regardless of timing</td>
+                        </tr>
+                        <tr>
+                            <td>Analytical insight</td>
+                            <td>Assesses whether current conditions are evolving in line with past periods</td>
+                            <td>Assesses whether current dynamics structurally resemble past cycles</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <a href="/major-findings#overall-ranking" style="text-decoration: none; color: inherit;">
+                    <p>The two bar graphs below rank all eight recessions by their average similarity score across all
+                        <strong>six indicators</strong> and all <strong>six time windows</strong>.
+                    </p>
+                    <figure>
+                        <img src="/images/Major%20findings/Overall-Recession-similarity.png"
+                            alt="Overall Recession Similarity Ranking">
+                    </figure>
+                    <ul>
+                        <li><strong>2008</strong> is the clearest match to today, with the highest similarity in both
+                            measures, followed by <strong>2020</strong> as the second closest.</li>
+                        <li>Most other recessions show only moderate similarity (scores mostly between 40–59), meaning
+                            today's conditions are not strongly aligned with them.</li>
+                        <li>DTW scores are consistently higher than Spearman, suggesting the overall patterns/trends
+                            look
+                            similar, even if the exact relationships between indicators are weaker.</li>
+                    </ul>
+                </a>
             </section>
 
         </main>

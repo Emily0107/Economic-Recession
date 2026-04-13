@@ -1,9 +1,13 @@
 :root {
-  --primary-color: #264653; /* Dark Blue-Green */
-  --secondary-color: #2A9D8F; /* Muted Teal */
-  --accent-color: #E9C46A; /* Muted Gold (optional accent) */
+  --primary-color: #264653;
+  /* Dark Blue-Green */
+  --secondary-color: #2A9D8F;
+  /* Muted Teal */
+  --accent-color: #E9C46A;
+  /* Muted Gold (optional accent) */
   --text-color: #333;
-  --bg-color: #f4f9f9; /* Very light blue-grey */
+  --bg-color: #f4f9f9;
+  /* Very light blue-grey */
   --header-bg: #fff;
   --link-color: #264653;
   --link-hover: #2A9D8F;
@@ -20,10 +24,11 @@ body {
 
 header {
   background-color: var(--header-bg);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1rem 2rem;
   display: flex;
-  justify-content: flex-end; /* Everything to the right */
+  justify-content: flex-end;
+  /* Everything to the right */
   align-items: center;
   position: sticky;
   top: 0;
@@ -58,7 +63,9 @@ main {
   padding: 0 2rem;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   color: var(--primary-color);
 }
 
@@ -73,7 +80,7 @@ section {
   padding: 2rem;
   margin-bottom: 2rem;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease;
 }
 
@@ -115,10 +122,19 @@ footer {
 }
 
 /* Specific styling for content sections */
+h4 {
+  margin-bottom: 0.25rem;
+}
+
 .content-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  margin-top: 0.25rem;
+}
+
+.content-grid figure {
+  margin: 10px 0;
 }
 
 figure {
@@ -145,7 +161,8 @@ table {
   text-align: left;
 }
 
-table th, table td {
+table th,
+table td {
   padding: 12px 15px;
   border: 1px solid #ddd;
 }

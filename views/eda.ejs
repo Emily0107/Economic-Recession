@@ -135,15 +135,58 @@
 
                 </p>
 
+
+                <h3 id="avg-trajectory">4.1. Average Indicator Trajectory Before Recession</h3>
+                <ul>
+                    <li>The S&P 500 often declines 3 to 6 months before recession.</li>
+                    <li>VIX tends to increase sharply near recession onset.</li>
+                    <li>Inflation and interest rate patterns vary across economic periods.</li>
+                </ul>
+                <div class="content-grid">
+                    <figure>
+                        <img src="images/EDA/average%20line%20graph%20economic%20indicator.png"
+                            alt="Average line graph economic indicator">
+                        <figcaption>Figure 4. Average line graph economic indicator.
+                        </figcaption>
+                    </figure>
+
+                    <figure>
+                        <img src="images/EDA/average%20line%20graph%20financial%20indicator.png"
+                            alt="Average line graph financial indicator">
+                        <figcaption>Figure 5. Average line graph financial indicator.
+                        </figcaption>
+                    </figure>
+                </div>
+                <p>
+                    These results suggest that financial market indicators, particularly stock performance and
+                    volatility, may provide stronger short-term signals of upcoming recessions than traditional
+                    macroeconomic indicators. </p>
+
+                <p>
+                    However, the economic indicators may behave differently before every US recession so the following
+                    section explore the value changes of each indicator across 5 different time frames before each
+                    recession.
+                </p>
+
+                <h3>4.2. Individual Indicator Changes Before Recession</h3>
+
+                <p>
+                    In this section, the data is normalized to percentage changes to compare the magnitude of changes
+                    across different indicators and time periods. The data is then seperated into two categories:
+                    1. 1970-1980: Unemployment, Inflation, Interest Rates, and S&P500
+                    2. 1990-2024: S&P 500, VIX, Gold, and Oil Prices
+                    That is because the data for VIX and Gold Prices are only available from 1990 onwards.
+                </p>
+
                 <div class="content-grid">
                     <figure>
                         <img src="/images/EDA/indicators%20changes%20heatmap%201970.png" alt="Indicator heatmap 1968">
-                        <figcaption>Figure 4. Indicator percentage changes before recessions (1968–2024).</figcaption>
+                        <figcaption>Figure 6. Indicator percentage changes before recessions (1968–2024).</figcaption>
                     </figure>
 
                     <figure>
                         <img src="/images/EDA/indicator%20changes%20bubble%201970.png" alt="Indicator bubble plot 1968">
-                        <figcaption>Figure 4.1. Indicator changes before recessions (1968–2024) - Bubble plot.
+                        <figcaption>Figure 7. Indicator changes before recessions (1968–2024) - Bubble plot.
                         </figcaption>
                     </figure>
                 </div>
@@ -169,20 +212,18 @@
                 <div class="content-grid">
                     <figure>
                         <img src="/images/EDA/indicator%20changes%20heatmap%201990.png" alt="Indicator heatmap 1990">
-                        <figcaption>Figure 5. Indicator percentage changes before recessions (1990–2024).</figcaption>
+                        <figcaption>Figure 8. Indicator percentage changes before recessions (1990–2024).</figcaption>
                     </figure>
 
                     <figure>
                         <img src="/images/EDA/indicator%20change%20bubble%201990.png" alt="Indicator bubble plot 1990">
-                        <figcaption>Figure 5.1. Indicator changes before recessions (1990–2024) - Bubble plot.
+                        <figcaption>Figure 9. Indicator changes before recessions (1990–2024) - Bubble plot.
                         </figcaption>
                     </figure>
                 </div>
 
                 <p>
-                    Since the 1990 recession began in August 1990 and financial data started in January 1990, it is
-                    excluded from the 12- and 24-month windows due to insufficient prior data.
-                    From the heatmaps and bubble plots, we have observed the followings:
+                    The heatmaps and bubble plots covering 1990 to 2024 suggests the following:
                 </p>
 
                 <ul>
@@ -198,35 +239,6 @@
 
             </section>
 
-            <section>
-                <h2>5. Preliminary Insights and Hypothesis Formation</h2>
-
-                <ul>
-                    <li>The S&P 500 often declines 3 to 6 months before recession.</li>
-                    <li>VIX tends to increase sharply near recession onset.</li>
-                    <li>Inflation and interest rate patterns vary across economic periods.</li>
-                </ul>
-                <div class="content-grid">
-                    <figure>
-                        <img src="images/EDA/average%20line%20graph%20economic%20indicator.png"
-                            alt="Average line graph economic indicator">
-                        <figcaption>Figure 6. Average line graph economic indicator.
-                        </figcaption>
-                    </figure>
-
-                    <figure>
-                        <img src="images/EDA/average%20line%20graph%20financial%20indicator.png"
-                            alt="Average line graph financial indicator">
-                        <figcaption>Figure 7. Average line graph financial indicator.
-                        </figcaption>
-                    </figure>
-                </div>
-                <p>
-                    These results suggest that financial market indicators, particularly stock performance and
-                    volatility, may provide stronger short-term signals of upcoming recessions than traditional
-                    macroeconomic indicators.
-                </p>
-            </section>
         </main>
 
         <%- include('partials/footer') %>

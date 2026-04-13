@@ -21,9 +21,13 @@
                 pandemic. Because of this, rather than looking for one universal warning sign, we compared the current
                 data (April 2024 – March 2026) for each of the six indicators against every pre-recession period across
                 six time windows to determine which past recession today's economy most closely resembles.</p>
+            <p>
+                In comparison to the current economic conditions (2024-2026), we have excluded the inflation data. This
+                is because the inflation data is only updated yearly and not available for 2025 onwards.
+            </p>
             <section>
                 <h2>1. Analysis Findings</h2>
-                <h3>1.1 Overall Recession Similarity Ranking</h3>
+                <h3 id="overall-ranking">1.1 Overall Recession Similarity Ranking</h3>
                 <p>The two bar graphs below rank all eight recessions by their average similarity score across all
                     <strong>six indicators</strong> and all <strong>six time windows</strong>.
                 </p>
@@ -44,7 +48,134 @@
                 </ul>
 
                 <br>
-                <h3>1.2 Similarity by Time Window (averaged across all indicators)</h3>
+                <p>
+                    Now, let's compare each ecnonomic indicators separately to see how the current trend (2024-2026)
+                    compares to past pre-recession periods.
+                </p>
+                <h3>1.2 1-Year Trend Comparison (current vs top 2 matching periods per indicator)</h3>
+                <p>Across all six indicators, the current 2024–2026 trend traces patterns that closely mirror
+                    pre-recession trajectories from past downturns:</p>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>What to look for in the graphs</th>
+                            <th>Spearman (Trend Match)</th>
+                            <th>DTW (Pattern Match)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Overall direction (up/down)</td>
+                            <td>Do the lines rise and fall together at the same time?</td>
+                            <td>Less important</td>
+                        </tr>
+                        <tr>
+                            <td>Timing of changes</td>
+                            <td>Must match closely (peaks &amp; drops aligned)</td>
+                            <td>Can differ (DTW adjusts timing)</td>
+                        </tr>
+                        <tr>
+                            <td>Shape of the curve</td>
+                            <td>Somewhat important</td>
+                            <td>Most important — overall shape similarity</td>
+                        </tr>
+                        <tr>
+                            <td>Lag between lines</td>
+                            <td>❌ Penalized</td>
+                            <td>✅ Allowed (handles delays)</td>
+                        </tr>
+                        <tr>
+                            <td>When score is high</td>
+                            <td>Lines move together at the same time</td>
+                            <td>Lines look similar, even if shifted</td>
+                        </tr>
+                        <tr>
+                            <td>What it tells you</td>
+                            <td>"Is this behaving like past trends right now?"</td>
+                            <td>"Does this pattern resemble past cycles?"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>1.2.1. Unemployment:</h4>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/Unemployment.png" alt="Trend Unemployment">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/Unemployment.png" alt="Trend Unemployment">
+                    </figure>
+                </div>
+
+                <h4>1.2.2. Interest rates:</h4>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/Interest.png" alt="Trend Interest Rates">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/Interest.png" alt="Trend Interest Rates">
+                    </figure>
+                </div>
+
+                <h4>1.2.3. Oil prices:</h4>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/Oil.png" alt="Trend Oil Prices">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/Oil.png" alt="Trend Oil Prices">
+                    </figure>
+                </div>
+
+                <h4>1.2.4. SP500:</h4>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/SP500.png" alt="Trend SP500">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/SP500.png" alt="Trend SP500">
+                    </figure>
+                </div>
+
+                <h4>1.2.5. VIX:</h4>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/VIX.png" alt="Trend VIX">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/VIX.png" alt="Trend VIX">
+                    </figure>
+                </div>
+
+                <h4>1.2.6. Gold:</h4>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/Major%20findings/Spearman/Gold.png" alt="Trend Gold">
+                    </figure>
+                    <figure>
+                        <img src="/images/Major%20findings/DTW/Gold.png" alt="Trend Gold">
+                    </figure>
+                </div>
+                <p>Across the six indicators, most show consistent top matches between Spearman and DTW, indicating that
+                    both trend direction and overall pattern align closely with past pre-recession periods. However,
+                    <strong>unemployment</strong> and <strong>VIX</strong> diverge, with different top matches under
+                    each method, suggesting these
+                    indicators are more sensitive to timing shifts and volatility patterns rather than just directional
+                    trends. Overall, this highlights that while many indicators follow stable and comparable
+                    trajectories, others require time-aligned analysis (DTW) to fully capture their similarity to past
+                    cycles.
+                </p>
+
+                <!--
+                <br>
+                <h3>1.3 Similarity by Time Window (averaged across all indicators)</h3>
                 <figure>
                     <img src="/images/Major%20findings/average-across-indicators.png" alt="Similarity by Time Window">
                 </figure>
@@ -60,7 +191,7 @@
                     recessions, making it the most informative timeframe for comparison.</p>
 
                 <br>
-                <h3>1.3 Similarity by Economic Indicator (averaged across all time windows)</h3>
+                <h3>1.4 Similarity by Economic Indicator (averaged across all time windows)</h3>
                 <figure>
                     <img src="/images/Major%20findings/average-across-time-windows.png"
                         alt="Similarity by Economic Indicator">
@@ -78,97 +209,10 @@
                     Overall, the
                     indicator-level breakdown confirms that 2008 and 2020 are the dominant analogues, driven primarily
                     by gold and equity market behavior.</p>
+                -->
 
                 <br>
-                <h3>1.5 1-Year Trend Comparison (current vs top 2 matching periods per indicator)</h3>
-                <p>Across all six indicators, the current 2024–2026 trend traces patterns that closely mirror
-                    pre-recession trajectories from past downturns:</p>
-
-                <h4>1.5.1. Unemployment:</h4>
-                <p><strong>Unemployment</strong> tracks the 2008 recession most closely (score: 78), with a rising
-                    trend in recent months mirroring the pre-crisis buildup seen in both 2008 and 1969.</p>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/Unemployment.png" alt="Trend Unemployment">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/Unemployment.png" alt="Trend Unemployment">
-                    </figure>
-                </div>
-
-                <h4>1.5.2. Interest rates:</h4>
-                <p><strong>Interest rates</strong> are the standout signal — scoring 96 against the 2020 COVID
-                    Pandemic and 91 against 2008, with a sharp decline from peak levels closely replicating both
-                    pre-recession rate-cut cycles.</p>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/Interest.png" alt="Trend Interest Rates">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/Interest.png" alt="Trend Interest Rates">
-                    </figure>
-                </div>
-
-                <h4>1.5.3. Oil prices:</h4>
-                <p><strong>Oil prices</strong> show the weakest match overall (best score: 75 vs 2008), with
-                    current prices remaining subdued and not replicating the sharp spikes seen historically.</p>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/Oil.png" alt="Trend Oil Prices">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/Oil.png" alt="Trend Oil Prices">
-                    </figure>
-                </div>
-
-                <h4>1.5.4. SP500:</h4>
-                <p><strong>SP500</strong> mirrors both the 1980 Volcker period and 2008 (both score 86), showing a
-                    prolonged upward climb that historically preceded a sharp correction.</p>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/SP500.png" alt="Trend SP500">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/SP500.png" alt="Trend SP500">
-                    </figure>
-                </div>
-
-                <h4>1.5.5. VIX:</h4>
-                <p><strong>VIX</strong> aligns with the 2001 Dot-Com Bust (74), with a recent spike at the zero
-                    mark suggesting rising market anxiety similar to the lead-up to that crash.</p>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/VIX.png" alt="Trend VIX">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/VIX.png" alt="Trend VIX">
-                    </figure>
-                </div>
-
-                <h4>1.5.6. Gold:</h4>
-                <p><strong>Gold</strong> is the most alarming signal — scoring 92 against 2020 and 90 against 2008
-                    — with a steep, sustained rise in the final months almost perfectly replicating both
-                    pre-recession safe-haven surges.</p>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/Gold.png" alt="Trend Gold">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/Gold.png" alt="Trend Gold">
-                    </figure>
-                </div>
-                <p><strong>Bottom line:</strong> Interest rates, gold, and equities collectively paint the most
-                    consistent pre-recession picture, with the 2008 Great Recession emerging as the single strongest
-                    historical analogue across the broadest set of indicators.</p>
-
-                <br>
-                <h3>1.6. Top 15 Similarity Scores</h3>
+                <h3>1.3. Top 15 Similarity Scores</h3>
                 <table class="table">
                     <thead>
                         <tr>
@@ -297,7 +341,7 @@
                 </table>
 
                 <br>
-                <h3>1.7. Conclusion</h3>
+                <h3>1.4. Conclusion</h3>
                 <p>Across all indicators and time windows analyzed, the <strong>current economic environment
                         (2024–2026)</strong> most
                     consistently resembles the period leading up to the <strong>2008 Great Recession</strong>, with the
