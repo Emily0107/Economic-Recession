@@ -61,12 +61,14 @@
                 <p>
                     The dataset contains variables measured on very different scales. For example, the S&P 500
                     is measured in large index values, while unemployment and inflation are measured in
-                    percentages. Direct comparison between these variables would therefore be misleading.
+                    small percentages. If we were to plot them together as-is, the largest numbers would
+                    dominate the graph and the smaller ones would look almost flat.
 
-                    To ensure fair comparison, all indicators were normalized using Z-score normalization,
-                    which transforms each variable to have a mean of zero and a standard deviation of one.
-                    This allows each indicator to be interpreted relative to its own historical average and variability,
-                    preventing larger-scale variables from dominating the visualizations.
+                    To solve this, all indicators were put onto the same scale using a technique called
+                    <b>Z-score normalization</b> (explained in more detail in
+                    <a href="#zscore-explanation">Section 4</a>). In short, Z-score converts each value
+                    into how far above or below its own historical average it is, so every indicator
+                    can be compared on equal footing.
                 </p>
 
                 <p>
@@ -103,11 +105,36 @@
             <section>
                 <h2>4. Visualization Analysis</h2>
 
+                <h3 id="zscore-explanation">Why Z-Score Normalization?</h3>
                 <p>
-                    To better understand indicator behavior around recession periods, two normalized line
-                    graphs were created. The first graph includes unemployment, inflation, interest rates, and oil
-                    prices,
-                    while the second graph includes the S&P 500, VIX, and gold prices.
+                    Before looking at the graphs, it helps to understand <b>why</b> the data was transformed.
+                    Each economic indicator is measured in a completely different unit and range:
+                    the S&P 500 is in the thousands, the interest rate is a small percentage,
+                    oil is priced in dollars per barrel, and the VIX typically falls between
+                    about 10 and 40. If we plotted all of these raw numbers on one graph,
+                    the indicator with the largest numbers would stretch the chart and the
+                    others would appear nearly flat — making it impossible to spot meaningful
+                    patterns.
+                </p>
+
+                <p>
+                    <b>Z-score</b> fixes this by converting every data point into how far it is
+                    from that indicator's own usual average, measured in units of that indicator's
+                    typical spread. In plain terms, instead of showing a raw number, the Z-score
+                    tells you: <em>"Is this value higher or lower than normal for this particular
+                        indicator, and by how much?"</em> A Z-score of 0 means the value is right
+                    at the average; a positive Z-score means it is above average; a negative
+                    Z-score means it is below average. This puts every indicator on the same
+                    scale, so we can overlay them on one graph and compare their movements
+                    side by side — regardless of whether the original numbers were in the thousands
+                    or in single digits.
+                </p>
+
+                <p>
+                    With all indicators on the same footing, two normalized line graphs were created
+                    to examine how they behave around recession periods. The first graph includes
+                    unemployment, inflation, interest rates, and oil prices, while the second
+                    includes the S&P 500, VIX, and gold prices.
                 </p>
 
                 <div class="content-grid">
@@ -138,9 +165,16 @@
 
                 <h3 id="avg-trajectory">4.1. Average Indicator Trajectory Before Recession</h3>
                 <ul>
-                    <li>The S&P 500 often declines 3 to 6 months before recession.</li>
-                    <li>VIX tends to increase sharply near recession onset.</li>
-                    <li>Inflation and interest rate patterns vary across economic periods.</li>
+                    In average across all 8 US economic recessions,
+                    <li><b>S&P 500 shows a small decline before recessions</b>, dropping from about <b>-0.25 to -0.35
+                            (around 0.1 decrease)</b>in the last few months before economic recession, which suggests
+                        the stock market starts weakening slightly.</li>
+                    <li><b>VIX rises very sharply 3 months before entering into recession</b>, jumping from around -0.5
+                        to almost 2.0 (about +2.5 increase), showing a sudden spike in market fear and uncertainty.</li>
+                    <li><b>Interest rates and inflation both increase gradually during 2 years period before
+                            recessions</b>, with interest rates rising from about <b> 0.2 to above 1.0 (around +0.8
+                            increase)</b> and inflation going from about <b> 0.3 to 0.7 (around +0.4 increase)</b>,
+                        meaning both are higher than usual leading into a recession</li>
                 </ul>
                 <div class="content-grid">
                     <figure>
@@ -157,16 +191,6 @@
                         </figcaption>
                     </figure>
                 </div>
-                <p>
-                    These results suggest that financial market indicators, particularly stock performance and
-                    volatility, may provide stronger short-term signals of upcoming recessions than traditional
-                    macroeconomic indicators. </p>
-
-                <p>
-                    However, the economic indicators may behave differently before every US recession so the following
-                    section explore the value changes of each indicator across 5 different time frames before each
-                    recession.
-                </p>
 
                 <h3>4.2. Individual Indicator Changes Before Recession</h3>
 

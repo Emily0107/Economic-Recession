@@ -175,3 +175,29 @@ table th {
 table tr:nth-of-type(even) {
   background-color: #f3f3f3;
 }
+
+/* Z-score explanation highlight box */
+.zscore-highlight {
+  background-color: #eaf6f4;
+  border-left: 4px solid var(--secondary-color);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.zscore-highlight p {
+  margin: 0 0 0.5rem 0;
+}
+
+.zscore-highlight ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.zscore-highlight li {
+  margin-bottom: 0.5rem;
+}
+
+.zscore-highlight li:last-child {
+  margin-bottom: 0;
+}
