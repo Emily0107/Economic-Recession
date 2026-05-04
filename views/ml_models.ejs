@@ -13,12 +13,267 @@
 <body>
     <%- include('partials/header') %>
 
-        <main>
-            <h1>Machine Learning Models</h1>
-            <section>
-                <p>Content for Machine Learning Models will go here.</p>
-            </section>
-        </main>
+    <main>
+    <h1>Machine Learning Models</h1>
+
+    <section>
+        <h2>1. Logistic Regression</h2>
+        <p>
+            Logistic Regression is used to estimate the probability that a given month
+            is in recession based on past economic and financial indicators.
+        </p>
+
+        <h3>1.1 Overview</h3>
+        <p>
+            The model uses lagged and rolling features (3–12 months) to capture early
+            warning signals before recessions occur.
+        </p>
+
+        <h3>1.2 Model Setup</h3>
+        <ul>
+            <li><b>Model A:</b> Macro (Unemployment, Inflation, Interest)</li>
+            <li><b>Model B:</b> Financial (S&P 500, VIX, Gold)</li>
+            <li><b>Model C:</b> All features combined</li>
+            <li><b>Model D:</b> Macro + S&P 500</li>
+        </ul>
+
+        <p style="font-size: 0.95em; color: #555; margin-top: 10px;">
+            <b>Side Note:</b> The models are separated for two main reasons. First, to compare the predictive power of 
+            macroeconomic indicators versus financial market indicators. Second, because the datasets have different 
+            time coverage, as financial variables such as VIX and gold are only available from 1990 onward.
+            <br><br>
+            Additionally, oil prices were excluded because they introduced noise and 
+            did not improve predictive performance. 
+            <br><br>
+            In Model D, VIX and gold were removed to extend the dataset further back in time, 
+            allowing the model to cover a longer historical period.
+        </p>
+
+        <h3>1.3 Model Comparison</h3>
+        <table>
+            <tr>
+                <th>Model</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1</th>
+                <th>ROC-AUC</th>
+                <th>Summary</th>
+            </tr>
+
+            <tr>
+                <td>A (Macro)</td>
+                <td>0.88</td>
+                <td>0.70</td>
+                <td>0.78</td>
+                <td>0.984</td>
+                <td>Strong balance, stable early-warning signal</td>
+            </tr>
+
+            <tr>
+                <td>B (Financial)</td>
+                <td>0.13</td>
+                <td>1.00</td>
+                <td>0.24</td>
+                <td>0.949</td>
+                <td>Captures all recessions but produces false alarms</td>
+            </tr>
+
+            <tr>
+                <td>C (Combined)</td>
+                <td>0.06</td>
+                <td>1.00</td>
+                <td>0.12</td>
+                <td>0.949</td>
+                <td>High sensitivity, but very noisy predictions</td>
+            </tr>
+
+            <tr>
+                <td>D (Macro + SP500)</td>
+                <td>0.74</td>
+                <td>0.85</td>
+                <td>0.79</td>
+                <td>0.979</td>
+                <td>Best trade-off between stability and early detection</td>
+            </tr>
+        </table>
+
+        <h4>How to Read the Metrics</h4>
+        <ul>
+            <li><b>Precision:</b> Of all recession warnings, what percentage were correct</li>
+            <li><b>Recall:</b> Of all actual recessions, what percentage of actual recessions did the model catch</li>
+            <li><b>F1 Score:</b> Balance between catching recessions and avoiding false alarms</li>
+            <li><b>ROC-AUC:</b> Ability to separate recession vs normal periods (1 = perfect, 0.5 = random guessing)</li>
+        </ul>
+
+        <h3>1.4 Confusion Matrix</h3>
+        <figure>
+            <img src="images\ML\LR-confusion-matrix.png" alt="Confusion Matrix">
+            <figcaption>Figure 1. Logistic Regression confusion matrix.</figcaption>
+        </figure>
+
+        <h3>1.5 Recession Probability</h3>
+        <p>
+            Each point shows the model’s estimated probability of a recession for that month, using only information available up to that time.
+            Red shaded areas represent actual recession periods.
+        </p>
+
+        <p>
+            A good early-warning model should show rising probability before recessions begin, falling probability after they end, and minimal spikes outside recession periods to avoid false alarms.
+        </p>
+
+        <p>
+            Logistic Regression produces smooth and sustained probability curves that rise gradually
+            before recessions and remain elevated during recession periods. The signals are generally
+            well-timed and confident, with particularly strong performance during the 2008 Great Recession
+            and the COVID-19 downturn in Models A and D.
+        </p>
+
+        <p>
+            However, the model can remain at high probability even after a recession has ended.
+            This is most noticeable in Model C, where the model continues to flag the 2021–2024 period
+            as recessionary, indicating slower adjustment to post-recession recovery.
+        </p>
+
+        <figure>
+            <img src="\images\ML\LR-recession-probability.png" alt="Recession Probability">
+            <figcaption>Figure 2. Logistic Regression predicted probability over time.</figcaption>
+        </figure>
+
+        <h3>1.6 Key Insight</h3>
+        <p>
+            Macro indicators provide the most reliable early warning signals,
+            while financial indicators react faster but generate more false alarms.
+        </p>
+    </section>
+
+    <!-- Future section -->
+    <section>
+    <h2>2. Random Forest</h2>
+
+    <p>
+        Random Forest is a tree-based ensemble model that captures non-linear relationships
+        between economic indicators. Unlike Logistic Regression, it can model more complex
+        interactions without assuming a linear relationship between variables.
+    </p>
+
+    <h3>2.1 Overview</h3>
+    <p>
+        The same feature setup is used as in Logistic Regression, including lagged and rolling
+        features (3–12 months). This allows a direct comparison between linear and non-linear models.
+    </p>
+
+    <h3>2.2 Model Setup</h3>
+    <ul>
+        <li><b>Model A:</b> Macro (Unemployment, Inflation, Interest)</li>
+        <li><b>Model B:</b> Financial (S&amp;P 500, VIX, Gold)</li>
+        <li><b>Model C:</b> All features combined</li>
+        <li><b>Model D:</b> Macro + S&amp;P 500</li>
+    </ul>
+
+    <h3>2.3 Model Comparison</h3>
+    <table>
+        <tr>
+            <th>Model</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1</th>
+            <th>ROC-AUC</th>
+            <th>Summary</th>
+        </tr>
+
+        <tr>
+            <td>A (Macro)</td>
+            <td>1.00</td>
+            <td>0.05</td>
+            <td>0.10</td>
+            <td>0.938</td>
+            <td>Very conservative, misses most recessions</td>
+        </tr>
+
+        <tr>
+            <td>B (Financial)</td>
+            <td>0.15</td>
+            <td>1.00</td>
+            <td>0.27</td>
+            <td>0.907</td>
+            <td>Detects all recessions but produces many false alarms</td>
+        </tr>
+
+        <tr>
+            <td>C (Combined)</td>
+            <td>1.00</td>
+            <td>1.00</td>
+            <td>1.00</td>
+            <td>1.000</td>
+            <td>Perfect fit, likely overfitting due to limited recession samples</td>
+        </tr>
+
+        <tr>
+            <td>D (Macro + SP500)</td>
+            <td>1.00</td>
+            <td>0.20</td>
+            <td>0.33</td>
+            <td>0.976</td>
+            <td>Improves detection slightly, but still misses many recessions</td>
+        </tr>
+    </table>
+
+    <h4>How to Read the Metrics</h4>
+    <ul>
+        <li><b>Precision:</b> Of all recession warnings, what percentage were correct</li>
+        <li><b>Recall:</b> Of all actual recessions, what percentage the model successfully detected</li>
+        <li><b>F1 Score:</b> Balance between detection and false alarms</li>
+        <li><b>ROC-AUC:</b> Overall ability to distinguish recession vs normal periods</li>
+    </ul>
+
+    <h3>2.4 Confusion Matrix</h3>
+    <p>
+        The Random Forest model performs well in identifying non-recession periods,
+        but struggles to consistently detect recessions.
+    </p>
+
+    <p>
+        Some models are too conservative (missing recessions), while others capture all
+        recessions but generate false alarms. The combined model shows perfect results,
+        likely due to overfitting.
+    </p>
+
+    <figure>
+        <img src="images/ML/RF-confusion-matrix.png" alt="Random Forest Confusion Matrix">
+        <figcaption>Figure 3. Random Forest confusion matrix.</figcaption>
+    </figure>
+
+    <h3>2.5 Recession Probability</h3>
+    <p>
+        The Random Forest model estimates recession probabilities over time, but the signals
+        are less stable compared to Logistic Regression.
+    </p>
+
+    <p>
+        Probabilities tend to either stay too low (delayed detection) or spike sharply
+        (false alarms), making early warning less consistent.
+    </p>
+
+    <figure>
+        <img src="images/ML/RF-recession-probability.png" alt="Random Forest Recession Probability">
+        <figcaption>Figure 4. Random Forest predicted probability over time.</figcaption>
+    </figure>
+
+    <h3>2.6 Key Insight</h3>
+    <p>
+        Random Forest captures complex patterns in the data but struggles with limited recession samples.
+        While it achieves very high accuracy in some cases, it often either misses recessions entirely
+        (low recall) or overfits when too many features are included.
+    </p>
+
+    <p>
+        Compared to Logistic Regression, Random Forest does not consistently improve early-warning performance.
+        This suggests that simpler, more interpretable models may be more reliable for recession prediction
+        when data is limited.
+    </p>
+</section>
+
+</main>
 
         <%- include('partials/footer') %>
 </body>

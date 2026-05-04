@@ -158,7 +158,20 @@
 
             <section id="machine-learning">
                 <h2>Machine Learning</h2>
-                <p>[Brief overview of ML approach]</p>
+                 <p>
+                    We use a Logistic Regression model to estimate the probability of a recession based on historical economic
+                    and financial indicators. The goal is to identify early warning signals before recessions begin.
+                </p>
+
+                <ul>
+                    <li>Macro indicators (unemployment, inflation, interest rates) provide the most reliable early warning signals.</li>
+                    <li>Financial indicators (S&amp;P 500, VIX, gold) react faster but generate more false alarms.</li>
+                    <li>The best-performing model (Macro + S&amp;P 500) achieves the strongest balance between early detection and accuracy.</li>
+                    <li>Recession risk can often be detected in advance, but only when combining multiple indicators.</li>
+                </ul>
+                <figure>
+                    <img src="\images\ML\LR-confusion-matrix.png" alt="Model comparison">
+                </figure>
             </section>
 
             <section id="major-findings">
