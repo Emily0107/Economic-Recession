@@ -138,36 +138,141 @@
             <section id="analysis">
                 <h2>Analysis</h2>
                 <a href="/eda#avg-trajectory" style="text-decoration: none; color: inherit;">
-                    <ul>
-                        <li>The S&P 500 often declines 3 to 6 months before recession.</li>
-                        <li>VIX tends to increase sharply near recession onset.</li>
-                        <li>Inflation and interest rate patterns vary across economic periods.</li>
-                    </ul>
                     <div class="content-grid">
                         <figure>
                             <img src="images/EDA/average%20line%20graph%20economic%20indicator.png"
                                 alt="Average line graph economic indicator">
+                            <figcaption>
+                                <strong>1968 Group (Macro indicators)</strong>
+                                <ul style="text-align: left; font-size: 0.9em; margin-top: 10px;">
+                                    <li><strong>Unemployment (-18.2%)</strong> — Unemployment was nearly 20% below its
+                                        historical average before recessions. The labor market looked healthy, giving
+                                        little warning of an incoming downturn.</li>
+                                    <li><strong>Inflation (+35.6%)</strong> — Inflation was running about 36% above
+                                        normal before recessions. Rising prices were a consistent early warning signal.
+                                    </li>
+                                    <li><strong>Interest (+47.5%)</strong> — Interest rates were almost 50% above their
+                                        long-run average. The Fed was actively tightening, which historically has
+                                        preceded recessions.</li>
+                                    <li><strong>SP500 (-22.3%)</strong> — Stock prices were about 22% below their
+                                        historical average before recessions, suggesting markets were already pricing in
+                                        some weakness.</li>
+                                </ul>
+                            </figcaption>
                         </figure>
                         <figure>
                             <img src="images/EDA/average%20line%20graph%20financial%20indicator.png"
                                 alt="Average line graph financial indicator">
+                            <figcaption>
+                                <strong>1990 Group (Financial/commodity indicators)</strong>
+                                <ul style="text-align: left; font-size: 0.9em; margin-top: 10px;">
+                                    <li><strong>Oil (+0.7%)</strong> — Oil prices were essentially flat vs. their
+                                        long-run average before recessions — almost no predictive signal here.</li>
+                                    <li><strong>VIX (-3.7%)</strong> — Market volatility was actually slightly below
+                                        average before recessions, meaning markets weren't particularly fearful in
+                                        advance. This is surprising and suggests VIX spikes during recessions rather
+                                        than before.</li>
+                                    <li><strong>Gold (-16.7%)</strong> — Gold was about 17% below its historical average
+                                        pre-recession, suggesting investors weren't rushing to safe havens ahead of
+                                        time.</li>
+                                </ul>
+                            </figcaption>
                         </figure>
                     </div>
                 </a>
+
+                <br>
+                <h3>Overall Average vs 24-Month Pre-Recession Average (All Indicators)</h3>
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>Overall Mean</th>
+                                <th>Overall Std</th>
+                                <th>Pre-Recession Mean (24m)</th>
+                                <th>Difference</th>
+                                <th>Difference (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Unemployment</strong></td>
+                                <td>6.031</td>
+                                <td>1.744</td>
+                                <td>4.936</td>
+                                <td>-1.095</td>
+                                <td>-18.2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Inflation</strong></td>
+                                <td>4.064</td>
+                                <td>2.796</td>
+                                <td>5.513</td>
+                                <td>1.449</td>
+                                <td>35.6</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Interest</strong></td>
+                                <td>5.095</td>
+                                <td>4.005</td>
+                                <td>7.513</td>
+                                <td>2.418</td>
+                                <td>47.5</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SP500</strong></td>
+                                <td>1026.648</td>
+                                <td>1116.438</td>
+                                <td>798.048</td>
+                                <td>-228.600</td>
+                                <td>-22.3</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Oil</strong></td>
+                                <td>51.956</td>
+                                <td>29.168</td>
+                                <td>52.335</td>
+                                <td>0.379</td>
+                                <td>0.7</td>
+                            </tr>
+                            <tr>
+                                <td><strong>VIX</strong></td>
+                                <td>19.497</td>
+                                <td>7.384</td>
+                                <td>18.769</td>
+                                <td>-0.728</td>
+                                <td>-3.7</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gold</strong></td>
+                                <td>115.069</td>
+                                <td>52.767</td>
+                                <td>95.907</td>
+                                <td>-19.162</td>
+                                <td>-16.7</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
             <section id="machine-learning">
                 <h2>Machine Learning</h2>
-                 <p>
-                    We use a Logistic Regression model to estimate the probability of a recession based on historical economic
+                <p>
+                    We use a Logistic Regression model to estimate the probability of a recession based on historical
+                    economic
                     and financial indicators. The goal is to identify early warning signals before recessions begin.
                 </p>
 
                 <ul>
-                    <li>Macro indicators (unemployment, inflation, interest rates) provide the most reliable early warning signals.</li>
+                    <li>Macro indicators (unemployment, inflation, interest rates) provide the most reliable early
+                        warning signals.</li>
                     <li>Financial indicators (S&amp;P 500, VIX, gold) react faster but generate more false alarms.</li>
-                    <li>The best-performing model (Macro + S&amp;P 500) achieves the strongest balance between early detection and accuracy.</li>
-                    <li>Recession risk can often be detected in advance, but only when combining multiple indicators.</li>
+                    <li>The best-performing model (Macro + S&amp;P 500) achieves the strongest balance between early
+                        detection and accuracy.</li>
+                    <li>Recession risk can often be detected in advance, but only when combining multiple indicators.
+                    </li>
                 </ul>
                 <figure>
                     <img src="\images\ML\LR-confusion-matrix.png" alt="Model comparison">
