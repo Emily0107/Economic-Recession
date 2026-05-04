@@ -35,171 +35,349 @@
 
             <section>
                 <h2>2. Data Cleaning and Preparation</h2>
-                <p>
-                    The recession indicator is recorded monthly and serves as the target variable for this
-                    analysis. Because the original datasets were reported at different frequencies including
-                    daily, monthly, and yearly, each dataset was converted to a consistent monthly frequency
-                    using end-of-month values.
-                </p>
 
-                <p>
-                    Two primary dataframes were constructed. The first includes unemployment, inflation,
-                    interest rates, and the oil data. The second includes financial indicators
-                    including the S&P 500, VIX, and gold prices beginning in 1990. Rows with missing values
-                    were removed to ensure aligned observations.
-                </p>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>Description</th>
+                                <th>Frequency</th>
+                                <th>Range</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Unemployment</td>
+                                <td>the unemployment rate (seasonally adjusted)</td>
+                                <td>monthly</td>
+                                <td>0 - 15</td>
+                            </tr>
+                            <tr>
+                                <td>Inflation</td>
+                                <td>the inflation rate</td>
+                                <td>annually</td>
+                                <td>-3 - 15</td>
+                            </tr>
+                            <tr>
+                                <td>Interest rates</td>
+                                <td>the federal funds rate (monthly average)</td>
+                                <td>monthly</td>
+                                <td>0 - 20</td>
+                            </tr>
+                            <tr>
+                                <td>Oil prices</td>
+                                <td>the price of West Texas Intermediate crude oil (monthly average)</td>
+                                <td>daily</td>
+                                <td>50 - 130</td>
+                            </tr>
+                            <tr>
+                                <td>SP500</td>
+                                <td>the S&P 500 index (monthly close)</td>
+                                <td>daily</td>
+                                <td>100 - 8000</td>
+                            </tr>
+                            <tr>
+                                <td>VIX</td>
+                                <td>the CBOE Volatility Index (daily close, monthly average)</td>
+                                <td>daily</td>
+                                <td>0 - 60</td>
+                            </tr>
+                            <tr>
+                                <td>Gold</td>
+                                <td>the price of gold (monthly close)</td>
+                                <td>monthly</td>
+                                <td>250 - 6000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                <p>
-                    The final cleaned dataset extends through 2024, and no duplicate or inconsistent records
-                    were identified.
-                </p>
             </section>
 
+
             <section>
-                <h2>3. Summary Statistics and Normalization</h2>
-
+                <h2>3. Visualization Analysis</h2>
                 <p>
-                    The dataset contains variables measured on very different scales. For example, the S&P 500
-                    is measured in large index values, while unemployment and inflation are measured in
-                    small percentages. If we were to plot them together as-is, the largest numbers would
-                    dominate the graph and the smaller ones would look almost flat.
-
-                    To solve this, all indicators were put onto the same scale using a technique called
-                    <b>Z-score normalization</b> (explained in more detail in
-                    <a href="#zscore-explanation">Section 4</a>). In short, Z-score converts each value
-                    into how far above or below its own historical average it is, so every indicator
-                    can be compared on equal footing.
+                    Once the data was normalized, we looked at the overall data to identify any patterns or
+                    relationships
+                    between the indicators.
                 </p>
 
-                <p>
-                    A correlation heatmap was also created to examine the relationships between all economic and
-                    financial indicators.
-                </p>
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/line_graph_1968.png" alt="Indicators line graph from 1968 to 2026">
+                        <figcaption>Figure 2. Normalized trends of unemployment, inflation, interest rates, and SP500
+                            (1968-2026)
+                        </figcaption>
+                        <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                            <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
+                            <pre
+                                style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># ── Normalize df_1968 for plotting ───────────────────────────────────────────
+scaled_1968 = df_1968.copy()
+indicators_1968 = ["Unemployment", "Inflation", "Interest", "SP500"]
+
+for col in indicators_1968:
+    col_min = scaled_1968[col].min()
+    col_max = scaled_1968[col].max()
+    scaled_1968[col] = (scaled_1968[col] - col_min) / (col_max - col_min)
+
+# ── Line graph comparison ─────────────────────────────────────────────────────
+plt.figure(figsize=(14, 8))
+
+for col in indicators_1968:
+    plt.plot(scaled_1968.index, scaled_1968[col], label=col)
+
+# Highlight recession periods
+start = None
+for date in scaled_1968.index:
+    if scaled_1968.loc[date, "Recession"] == 1 and start is None:
+        start = date
+    elif scaled_1968.loc[date, "Recession"] == 0 and start is not None:
+        plt.axvspan(start, date, alpha=0.15)
+        start = None
+
+if start is not None:
+    plt.axvspan(start, scaled_1968.index[-1], alpha=0.15)
+
+plt.axhline(0.5, linestyle="--")  # midpoint line at 0.5 for normalized data
+
+plt.legend(fontsize=10)
+plt.title("Normalized Unemployment, Inflation, Interest and SP500 Indicators with Recession Periods Highlighted", fontsize=14)
+plt.xlabel("Date")
+plt.ylabel("Normalized Value [0–1]")
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                        </details>
+                        <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                            <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
+                            <p style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">The graph shows how
+                                Unemployment, Inflation, Interest rates, and SP500 have changed over time from 1968 to
+                                2026, with shaded areas representing recession periods. As per the graph, Interest rates
+                                have been consistently declining since their peak in the early 1980s, while SP500 has
+                                been steadily rising over the entire period.</p>
+                        </details>
+                    </figure>
+
+                    <figure>
+                        <img src="/images/line_graph_1990.png" alt="Indicators line graph from 1990 to 2026">
+                        <figcaption>Figure 3. Normalized trends of VIX, Gold and Oil Prices (1990-2026)</figcaption>
+                        <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                            <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
+                            <pre
+                                style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># ── Normalize df_1990 for plotting ───────────────────────────────────────────
+scaled_1990 = df_1990.copy()
+indicators_1990 = ["Oil", "VIX", "Gold"]
+
+for col in indicators_1990:
+    col_min = scaled_1990[col].min()
+    col_max = scaled_1990[col].max()
+    scaled_1990[col] = (scaled_1990[col] - col_min) / (col_max - col_min)
+
+# ── Line graph comparison ─────────────────────────────────────────────────────
+plt.figure(figsize=(14, 8))
+
+for col in indicators_1990:
+    plt.plot(scaled_1990.index, scaled_1990[col], label=col)
+
+# Highlight recession periods
+start = None
+for date in scaled_1990.index:
+    if scaled_1990.loc[date, "Recession"] == 1 and start is None:
+        start = date
+    elif scaled_1990.loc[date, "Recession"] == 0 and start is not None:
+        plt.axvspan(start, date, alpha=0.15)
+        start = None
+
+if start is not None:
+    plt.axvspan(start, scaled_1990.index[-1], alpha=0.15)
+
+plt.axhline(0.5, linestyle="--")  # midpoint line at 0.5 for normalized data
+
+plt.legend(fontsize=10)
+plt.title("Normalized Oil, VIX and Gold Indicators with Recession Periods Highlighted", fontsize=14)
+plt.xlabel("Date")
+plt.ylabel("Normalized Value [0–1]")
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                        </details>
+                        <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                            <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
+                            <p style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">The graph shows how Oil, VIX,
+                                and Gold prices have changed over time from 1985 to 2026, with shaded areas marking
+                                recession periods. As per the graph, VIX consistently spikes during every recession,
+                                confirming that market volatility rises sharply whenever the economy enters a downturn.
+                            </p>
+                        </details>
+                    </figure>
+                </div>
+
+                <details style="margin-top: 20px; text-align: left; cursor: pointer;">
+                    <summary style="font-weight: bold; color: var(--link-color);">Zoom-In View for 24 months before each
+                        economic recession</summary>
+                    <div style="margin-top: 15px;">
+                        <img src="/images/EDA/close_up_view_1968.png" alt="Zoom-in view 1968"
+                            style="width: 100%; height: auto; margin-bottom: 20px;">
+                        <img src="/images/EDA/close_up_view_1990.png" alt="Zoom-in view 1990"
+                            style="width: 100%; height: auto;">
+                    </div>
+                </details>
+
+                <h3 id="avg-trajectory">3.1. Average Indicator Trajectory Before Recession</h3>
+
+                <p>After checking the overall trends of the indicators, we need to see if there are any specific
+                    patterns that lead up to a recession. We can do this by looking at the average trajectory of each
+                    indicator before a recession.</p>
 
                 <figure>
-                    <img src="/images/correlation-of-financial-economic-indicator.png" alt="Correlation heatmap">
-                    <figcaption>Figure 1. Correlation heatmap of economic and financial indicators.</figcaption>
+                    <iframe src="/images/EDA/economic_chart_1968.html" title="Average line graph economic indicator"
+                        style="width: 100%; height: 500px; border: none;"></iframe>
+                    <figcaption>Figure: Average line graph of Unemployment, Inflation, Interest, SP500 (1968–2026)
+                    </figcaption>
+                    <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                        <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
+                        <pre
+                            style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code>import plotly.graph_objects as go
+import plotly.graph_objects as go
+from sklearn.preprocessing import StandardScaler
+
+# df_1968: Unemployment, Inflation, Interest, SP500 (from 1968)
+
+scaled_1968 = df_1968.loc["1968":].copy()
+scaler_1968 = StandardScaler()
+indicators_1968 = ["Unemployment", "Inflation", "Interest", "SP500"]
+scaled_1968[indicators_1968] = scaler_1968.fit_transform(scaled_1968[indicators_1968])
+
+traj_1968 = indicator_trajectory(
+    scaled_1968,
+    indicators=indicators_1968,
+    months_before=24
+)
+
+fig_1968 = go.Figure()
+
+for col in traj_1968.columns:
+    fig_1968.add_trace(go.Scatter(
+        x=traj_1968.index,
+        y=traj_1968[col],
+        mode="lines",
+        name=col,
+        hovertemplate=f"<b>{col}</b><br>Month: %{{x}}<br>Z-score: %{{y:.2f}}<extra></extra>"
+    ))
+
+fig_1968.add_vline(
+    x=0,
+    line_dash="dash",
+    line_color="black",
+    annotation_text="Recession Start",
+    annotation_position="top right"
+)
+
+fig_1968.update_layout(
+    title="Average Indicator Trajectory Before Recession — Unemployment, Inflation, Interest, SP500 (1968–)",
+    xaxis_title="Months Before Recession",
+    yaxis_title="Standardized Value (Z-score)",
+    hovermode="closest",
+    legend_title="Indicator",
+    template="plotly_white"
+)
+
+fig_1968.show()
+fig_1968.write_html("economic_chart_1968.html", include_plotlyjs="cdn", full_html=True)</code></pre>
+                    </details>
+                    <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                        <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
+                        <p style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">The graph shows the average
+                            Z-score of Unemployment, Inflation, Interest rates, and SP500 across all recorded recessions
+                            from 1968 to 2026 in the 24 months leading up to their start, where a positive Z-score means
+                            the indicator was above its long-term average and a negative Z-score means it was below that
+                            long-term average. As per the graph, Interest rates and Inflation are consistently above
+                            their long-term averages throughout the entire 24-month window before a recession, making
+                            them the most reliable early warning signals.</p>
+                    </details>
                 </figure>
 
-                <p>
-                    Based on the heatmap, we observe that <b>inflation and interest rates have a strong positive
-                        correlation (0.69).</b>
-                    This is because central banks raise interest rates to control rising inflation. When inflation
-                    increases,
-                    the Federal Reserve typically increases rates to reduce spending and slow price growth. The <b>S&P
-                        500 has a negative
-                        correlation with interest rates (-0.46).</b> Higher interest rates increase borrowing costs for
-                    companies and reduce
-                    future earnings expectations, which can lower stock prices. The <b>S&P 500 also has a negative
-                        correlation with unemployment
-                        (-0.37)</b> and <b>positive correlation with gold (0.41).</b>
-                </p>
+                <figure>
+                    <iframe src="/images/EDA/economic_chart_1990.html" title="Average line graph financial indicator"
+                        style="width: 100%; height: 500px; border: none;"></iframe>
+                    <figcaption>Figure: Average line graph of VIX, Gold, and Oil (1988–2026)
+                    </figcaption>
+                    <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                        <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
+                        <pre
+                            style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code>import plotly.graph_objects as go
+import plotly.graph_objects as go
+from sklearn.preprocessing import StandardScaler
+
+scaled_df = financial_df.copy()
+scaler = StandardScaler()
+scaled_df[["SP500","VIX","Gold"]] = scaler.fit_transform(
+    scaled_df[["SP500","VIX","Gold"]]
+)
+
+# trajectory function
+traj = indicator_trajectory(
+    scaled_df,
+    indicators=["SP500","VIX","Gold"],
+    months_before=24
+)
+
+# plot with Plotly
+fig = go.Figure()
+
+for col in traj.columns:
+    fig.add_trace(go.Scatter(
+        x=traj.index,
+        y=traj[col],
+        mode="lines",
+        name=col,
+        hovertemplate=f"&lt;b&gt;{col}&lt;/b&gt;&lt;br&gt;Month: %{{x}}&lt;br&gt;Z-score: %{{y:.2f}}&lt;extra&gt;&lt;/extra&gt;"
+    ))
+
+fig.add_vline(
+    x=0,
+    line_dash="dash",
+    line_color="black",
+    annotation_text="Recession Start",
+    annotation_position="top right"
+)
+
+fig.update_layout(
+    title="Average Indicator Trajectory Before Recession (Standardized)",
+    xaxis_title="Months Before Recession",
+    yaxis_title="Standardized Value (Z-score)",
+    hovermode="closest",
+    legend_title="Indicator",
+    template="plotly_white"
+)
+
+fig.show()
+
+# Financial indicators chart
+fig.write_html("financial_chart.html", include_plotlyjs="cdn", full_html=True)</code></pre>
+                    </details>
+                    <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                        <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
+                        <p style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">The graph shows the average
+                            Z-score of Oil, VIX, and Gold across all recorded recessions from 1988 to 2026 in the 24
+                            months leading up to their start, where a positive Z-score means the indicator was above its
+                            long-term average and a negative Z-score means it was below that long-term average. As per
+                            the graph, VIX spikes dramatically in the final 3 months before a recession starts, driven
+                            largely by the extreme market fear seen during the 2008 financial crisis and the 2020 COVID
+                            recession.</p>
+                    </details>
+                </figure>
+
+                <h3>3.2. Individual Indicator Changes Before Recession</h3>
 
                 <p>
-                    Overall, while the correlations are moderate rather than strong, they reflect logical economic
-                    relationships between monetary policy,
-                    economic conditions, and financial markets.
-                </p>
-            </section>
-
-            <section>
-                <h2>4. Visualization Analysis</h2>
-
-                <h3 id="zscore-explanation">Why Z-Score Normalization?</h3>
-                <p>
-                    Before looking at the graphs, it helps to understand <b>why</b> the data was transformed.
-                    Each economic indicator is measured in a completely different unit and range:
-                    the S&P 500 is in the thousands, the interest rate is a small percentage,
-                    oil is priced in dollars per barrel, and the VIX typically falls between
-                    about 10 and 40. If we plotted all of these raw numbers on one graph,
-                    the indicator with the largest numbers would stretch the chart and the
-                    others would appear nearly flat — making it impossible to spot meaningful
-                    patterns.
-                </p>
-
-                <p>
-                    <b>Z-score</b> fixes this by converting every data point into how far it is
-                    from that indicator's own usual average, measured in units of that indicator's
-                    typical spread. In plain terms, instead of showing a raw number, the Z-score
-                    tells you: <em>"Is this value higher or lower than normal for this particular
-                        indicator, and by how much?"</em> A Z-score of 0 means the value is right
-                    at the average; a positive Z-score means it is above average; a negative
-                    Z-score means it is below average. This puts every indicator on the same
-                    scale, so we can overlay them on one graph and compare their movements
-                    side by side — regardless of whether the original numbers were in the thousands
-                    or in single digits.
-                </p>
-
-                <p>
-                    With all indicators on the same footing, two normalized line graphs were created
-                    to examine how they behave around recession periods. The first graph includes
-                    unemployment, inflation, interest rates, and oil prices, while the second
-                    includes the S&P 500, VIX, and gold prices.
-                </p>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/economic-indicators-time-series-plot.png" alt="Economic indicators graph">
-                        <figcaption>Figure 2. Normalized trends of unemployment, inflation, and interest rates.
-                        </figcaption>
-                    </figure>
-
-                    <figure>
-                        <img src="/images/financial-indicators-time-series-plot.png" alt="Financial indicators graph">
-                        <figcaption>Figure 3. Normalized trends of S&P 500, VIX, and gold prices.</figcaption>
-                    </figure>
-                </div>
-
-                <p>
-                    The long-term line graphs show that during the first four recessions (1970s–early 1980s),
-                    <b>inflation and interest rates increased before recession.</b> In contrast, during the later
-                    recessions (2001, 2008, 2020), both generally declined before recession, indicating that patterns
-                    vary across economic periods. Unemployment typically remains stable before recession and rises
-                    afterward,
-                    suggesting it behaves as a lagging indicator. Since line graphs do not measure the size of changes,
-                    heatmaps
-                    were created to show percentage changes 3, 6, 12, and 24 months before each recession.
-
-                </p>
-
-
-                <h3 id="avg-trajectory">4.1. Average Indicator Trajectory Before Recession</h3>
-                <ul>
-                    In average across all 8 US economic recessions,
-                    <li><b>S&P 500 shows a small decline before recessions</b>, dropping from about <b>-0.25 to -0.35
-                            (around 0.1 decrease)</b>in the last few months before economic recession, which suggests
-                        the stock market starts weakening slightly.</li>
-                    <li><b>VIX rises very sharply 3 months before entering into recession</b>, jumping from around -0.5
-                        to almost 2.0 (about +2.5 increase), showing a sudden spike in market fear and uncertainty.</li>
-                    <li><b>Interest rates and inflation both increase gradually during 2 years period before
-                            recessions</b>, with interest rates rising from about <b> 0.2 to above 1.0 (around +0.8
-                            increase)</b> and inflation going from about <b> 0.3 to 0.7 (around +0.4 increase)</b>,
-                        meaning both are higher than usual leading into a recession</li>
-                </ul>
-                <div class="content-grid">
-                    <figure>
-                        <img src="images/EDA/average%20line%20graph%20economic%20indicator.png"
-                            alt="Average line graph economic indicator">
-                        <figcaption>Figure 4. Average line graph economic indicator.
-                        </figcaption>
-                    </figure>
-
-                    <figure>
-                        <img src="images/EDA/average%20line%20graph%20financial%20indicator.png"
-                            alt="Average line graph financial indicator">
-                        <figcaption>Figure 5. Average line graph financial indicator.
-                        </figcaption>
-                    </figure>
-                </div>
-
-                <h3>4.2. Individual Indicator Changes Before Recession</h3>
-
-                <p>
-                    In this section, the data is normalized to percentage changes to compare the magnitude of changes
-                    across different indicators and time periods. The data is then seperated into two categories:
-                    1. 1970-1980: Unemployment, Inflation, Interest Rates, and S&P500
-                    2. 1990-2024: S&P 500, VIX, Gold, and Oil Prices
-                    That is because the data for VIX and Gold Prices are only available from 1990 onwards.
+                    As line graphs alone cannot clearly show the magnitude of changes of each indicator before a
+                    recession, we will look at the percentage changes of each indicator before a recession. Below are
+                    the heatmaps and bubble plots for each indicator.
                 </p>
 
                 <div class="content-grid">
@@ -216,7 +394,7 @@
                 </div>
 
                 <p>
-                    The heatmaps and bubble plots covering 1968 to 2024 suggests the following:
+                    The heatmaps and bubble plots covering 1968 to 2026 suggests that:
                 </p>
 
                 <ul>
@@ -247,7 +425,7 @@
                 </div>
 
                 <p>
-                    The heatmaps and bubble plots covering 1990 to 2024 suggests the following:
+                    The heatmaps and bubble plots covering 1990 to 2026 suggests that:
                 </p>
 
                 <ul>
@@ -261,6 +439,40 @@
                     variables.
                 </p>
 
+            </section>
+
+            <section>
+                <h2>4. Relationship between Indicators</h2>
+
+                <p>
+                    After analyzing the individual indicators, we will now look at the relationships between the
+                    indicators using heatmaps.
+                </p>
+
+                <figure>
+                    <img src="/images/correlation-of-financial-economic-indicator.png" alt="Correlation heatmap">
+                    <figcaption>Figure 1. Correlation heatmap of economic and financial indicators.</figcaption>
+                </figure>
+
+                <p>
+                    Based on the heatmap, we observe that <b>inflation and interest rates have a strong positive
+                        correlation (0.69).</b>
+                    This is because central banks raise interest rates to control rising inflation. When inflation
+                    increases,
+                    the Federal Reserve typically increases rates to reduce spending and slow price growth. The <b>S&P
+                        500 has a negative
+                        correlation with interest rates (-0.46).</b> Higher interest rates increase borrowing costs for
+                    companies and reduce
+                    future earnings expectations, which can lower stock prices. The <b>S&P 500 also has a negative
+                        correlation with unemployment
+                        (-0.37)</b> and <b>positive correlation with gold (0.41).</b>
+                </p>
+
+                <p>
+                    Overall, while the correlations are moderate rather than strong, they reflect logical economic
+                    relationships between monetary policy,
+                    economic conditions, and financial markets.
+                </p>
             </section>
 
         </main>
