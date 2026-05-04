@@ -15,19 +15,42 @@
 
         <main>
             <h1>Major Findings</h1>
-            <p>During the exploratory data analysis (EDA) phase, we observed that no single economic indicator
-                follows a consistent pattern before every recession. Each historical U.S. recession was triggered by
-                different factors — from oil shocks and aggressive Fed tightening to housing bubbles and a global
-                pandemic. Because of this, rather than looking for one universal warning sign, we compared the current
-                data (April 2024 – March 2026) for each of the six indicators against every pre-recession period across
-                six time windows to determine which past recession today's economy most closely resembles.</p>
-            <p>
-                In comparison to the current economic conditions (2024-2026), we have excluded the inflation data. This
-                is because the inflation data is only updated yearly and not available for 2025 onwards.
-            </p>
             <section>
                 <h2>1. Analysis Findings</h2>
-                <h3 id="overall-ranking">1.1 Overall Recession Similarity Ranking</h3>
+                <p>During the exploratory data analysis (EDA) phase, we observed that no single economic indicator
+                    follows a consistent pattern before every recession. Each historical U.S. recession was triggered by
+                    different factors — from oil shocks and aggressive Fed tightening to housing bubbles and a global
+                    pandemic. Because of this, rather than looking for one universal warning sign, we compared the current
+                    data (April 2024 – March 2026) for each of the six indicators against every pre-recession period across
+                    six time windows to determine which past recession today's economy most closely resembles.</p>
+                <p>
+                    In comparison to the current economic conditions (2024-2026), we have excluded the inflation data. This
+                    is because the inflation data is only updated yearly and not available for 2025 onwards.
+                </p>
+
+                <h3>1.1 Indicator Changes Before Each Recession</h3>
+                <p>Based on the historical percentage changes of each indicator leading up to past recessions, we observed the following trends:</p>
+                <ul>
+                    <li><strong>Unemployment & Inflation:</strong> Unemployment typically rises after a recession begins rather than before, making it a weak early warning indicator. Inflation shows a mixed pattern with no consistent direction.</li>
+                    <li><strong>Interest Rates:</strong> The behavior of interest rates varies across different periods, largely because they reflect central bank policy responses rather than direct economic stress.</li>
+                    <li><strong>Market-Based Indicators (S&P 500 & VIX):</strong> Market indicators often provide earlier signals than macroeconomic variables. The S&P 500 typically begins to decline 3 to 6 months before a recession, while the VIX volatility index spikes sharply as a recession approaches.</li>
+                    <li><strong>Commodities (Gold & Oil):</strong> Both gold and oil prices fail to show a consistent pattern across historical recessions.</li>
+                </ul>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/EDA/indicators%20changes%20heatmap%201970.png" alt="Indicator heatmap 1968">
+                        <figcaption>Figure 1. Indicator percentage changes before recessions (1968–2024).</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="/images/EDA/indicator%20changes%20heatmap%201990.png" alt="Indicator heatmap 1990">
+                        <figcaption>Figure 2. Indicator percentage changes before recessions (1990–2024).</figcaption>
+                    </figure>
+                </div>
+
+                <p>Overall, these results suggest that while market-based indicators react faster and provide earlier warnings, recession patterns ultimately depend on the specific underlying causes of each economic downturn.</p>
+
+                <h3>1.2 Overall Recession Similarity Ranking</h3>
                 <p>The two bar graphs below rank all eight recessions by their average similarity score across all
                     <strong>six indicators</strong> and all <strong>six time windows</strong>.
                 </p>
@@ -35,6 +58,7 @@
                 <figure>
                     <img src="/images/Major%20findings/Overall-Recession-similarity.png"
                         alt="Overall Recession Similarity Ranking">
+                    <figcaption>Figure 3. Overall Recession Similarity Ranking.</figcaption>
                 </figure>
 
                 <p>Two recessions stand out as statistically notable matches to the current economic environment:</p>
@@ -46,302 +70,64 @@
                     <li>DTW scores are consistently higher than Spearman, suggesting the overall patterns/trends look
                         similar, even if the exact relationships between indicators are weaker.</li>
                 </ul>
+            </section>
 
-                <br>
+            <section>
+                <h2>2. Machine Learning Findings</h2>
+
+                <h3>2.1 Model Comparison</h3>
+                <p>We compared two approaches for recession prediction: <strong>Logistic Regression</strong> (linear model) and
+                    <strong>Random Forest</strong> (non-linear model).
+                </p>
+
+                <ul>
+                    <li><strong>Logistic Regression</strong> produces smooth, stable probability signals and provides consistent early warnings.</li>
+                    <li><strong>Random Forest</strong> captures more complex patterns but produces unstable predictions, often either missing recessions or generating false alarms.</li>
+                </ul>
+
+                <h3>2.2 Performance Summary</h3>
+                <ul>
+                    <li><strong>Logistic Regression</strong> shows the best overall balance between precision and recall, making it reliable for early-warning detection.</li>
+                    <li><strong>Random Forest</strong> is inconsistent:
+                        <ul>
+                            <li>Some models are too conservative (miss recessions)</li>
+                            <li>Others are too sensitive (many false alarms)</li>
+                            <li>The combined model shows perfect results, indicating likely <strong>overfitting</strong> due to limited recession data</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="content-grid">
+                    <figure>
+                        <img src="/images/ML/LR-confusion-matrix.png" alt="Logistic Regression Confusion Matrix">
+                        <figcaption>Figure 4. Logistic Regression Confusion Matrix.</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="/images/ML/RF-confusion-matrix.png" alt="Random Forest Confusion Matrix">
+                        <figcaption>Figure 5. Random Forest Confusion Matrix.</figcaption>
+                    </figure>
+                </div>
+
+                <h3>2.3 Feature Insights</h3>
+                <ul>
+                    <li><strong>Macro indicators</strong> provide the most stable and reliable signals.</li>
+                    <li><strong>Financial indicators</strong> react faster but are more volatile and noisy.</li>
+                    <li>The best-performing setup is <strong>Macro + S&amp;P 500 (Model D)</strong>, balancing stability and responsiveness.</li>
+                </ul>
+
+                <h3>2.4 Conclusion</h3>
                 <p>
-                    Now, let's compare each ecnonomic indicators separately to see how the current trend (2024-2026)
-                    compares to past pre-recession periods.
-                </p>
-                <h3>1.2 1-Year Trend Comparison (current vs top 2 matching periods per indicator)</h3>
-                <p>Across all six indicators, the current 2024–2026 trend traces patterns that closely mirror
-                    pre-recession trajectories from past downturns:</p>
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>What to look for in the graphs</th>
-                            <th>Spearman (Trend Match)</th>
-                            <th>DTW (Pattern Match)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Overall direction (up/down)</td>
-                            <td>Do the lines rise and fall together at the same time?</td>
-                            <td>Less important</td>
-                        </tr>
-                        <tr>
-                            <td>Timing of changes</td>
-                            <td>Must match closely (peaks &amp; drops aligned)</td>
-                            <td>Can differ (DTW adjusts timing)</td>
-                        </tr>
-                        <tr>
-                            <td>Shape of the curve</td>
-                            <td>Somewhat important</td>
-                            <td>Most important — overall shape similarity</td>
-                        </tr>
-                        <tr>
-                            <td>Lag between lines</td>
-                            <td>❌ Penalized</td>
-                            <td>✅ Allowed (handles delays)</td>
-                        </tr>
-                        <tr>
-                            <td>When score is high</td>
-                            <td>Lines move together at the same time</td>
-                            <td>Lines look similar, even if shifted</td>
-                        </tr>
-                        <tr>
-                            <td>What it tells you</td>
-                            <td>"Is this behaving like past trends right now?"</td>
-                            <td>"Does this pattern resemble past cycles?"</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h4>1.2.1. Unemployment:</h4>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/Unemployment.png" alt="Trend Unemployment">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/Unemployment.png" alt="Trend Unemployment">
-                    </figure>
-                </div>
-
-                <h4>1.2.2. Interest rates:</h4>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/Interest.png" alt="Trend Interest Rates">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/Interest.png" alt="Trend Interest Rates">
-                    </figure>
-                </div>
-
-                <h4>1.2.3. Oil prices:</h4>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/Oil.png" alt="Trend Oil Prices">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/Oil.png" alt="Trend Oil Prices">
-                    </figure>
-                </div>
-
-                <h4>1.2.4. SP500:</h4>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/SP500.png" alt="Trend SP500">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/SP500.png" alt="Trend SP500">
-                    </figure>
-                </div>
-
-                <h4>1.2.5. VIX:</h4>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/VIX.png" alt="Trend VIX">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/VIX.png" alt="Trend VIX">
-                    </figure>
-                </div>
-
-                <h4>1.2.6. Gold:</h4>
-
-                <div class="content-grid">
-                    <figure>
-                        <img src="/images/Major%20findings/Spearman/Gold.png" alt="Trend Gold">
-                    </figure>
-                    <figure>
-                        <img src="/images/Major%20findings/DTW/Gold.png" alt="Trend Gold">
-                    </figure>
-                </div>
-                <p>Across the six indicators, most show consistent top matches between Spearman and DTW, indicating that
-                    both trend direction and overall pattern align closely with past pre-recession periods. However,
-                    <strong>unemployment</strong> and <strong>VIX</strong> diverge, with different top matches under
-                    each method, suggesting these
-                    indicators are more sensitive to timing shifts and volatility patterns rather than just directional
-                    trends. Overall, this highlights that while many indicators follow stable and comparable
-                    trajectories, others require time-aligned analysis (DTW) to fully capture their similarity to past
-                    cycles.
+                    Overall, <strong>Logistic Regression outperforms Random Forest</strong> for this task. It delivers more
+                    consistent, interpretable, and reliable early-warning signals. While Random Forest can model complex
+                    relationships, it struggles with limited recession data and is more prone to instability and overfitting.
                 </p>
 
-                <!--
-                <br>
-                <h3>1.3 Similarity by Time Window (averaged across all indicators)</h3>
-                <figure>
-                    <img src="/images/Major%20findings/average-across-indicators.png" alt="Similarity by Time Window">
-                </figure>
-                <p>The current economic trend most <strong>closely</strong> resembles the <strong>2008 Great
-                        Recession</strong> pre-recession period,
-                    consistently scoring the highest similarity across nearly all look-back windows — peaking at 79.0 at
-                    the 1-year mark. The <strong>2020 COVID Pandemic</strong> and <strong>1981 High Interest
-                        Rates</strong>
-                    periods also show elevated
-                    similarity, particularly at shorter and longer time windows respectively. Similarity scores are
-                    generally weakest for the 1980 Volcker Inflation Fight, suggesting today's environment diverges most
-                    from that era. The 1-year look-back window tends to produce the strongest signal across most
-                    recessions, making it the most informative timeframe for comparison.</p>
+                <p><strong>Key takeaway:</strong> Simpler models perform better when data is limited and stability is critical for
+                    early recession detection.</p>
+            </section>
 
-                <br>
-                <h3>1.4 Similarity by Economic Indicator (averaged across all time windows)</h3>
-                <figure>
-                    <img src="/images/Major%20findings/average-across-time-windows.png"
-                        alt="Similarity by Economic Indicator">
-                </figure>
-                <p><strong>Gold</strong> and <strong>SP500</strong> are the strongest differentiating indicators, with
-                    Gold showing
-                    near-identical
-                    behavior to both the <strong>2008 Great Recession</strong> (86.9) and <strong>2020 COVID
-                        Pandemic</strong> (84.6). SP500 aligns
-                    closely with the <strong>2008 recession</strong> (84.0) and <strong>1981 High Interest
-                        Rates</strong> (82.4). Interest rates tell a
-                    more mixed story — showing low similarity to stagflation-era recessions (29.3–30.2) but moderate
-                    alignment elsewhere. Oil and VIX show the most variability, with Oil diverging significantly from
-                    the <strong>1990 Gulf War shock</strong> (29.7) and VIX doing the same for that period (26.7).
-                    Overall, the
-                    indicator-level breakdown confirms that 2008 and 2020 are the dominant analogues, driven primarily
-                    by gold and equity market behavior.</p>
-                -->
-
-                <br>
-                <h3>1.3. Top 15 Similarity Scores</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Recession</th>
-                            <th>Indicator</th>
-                            <th>Window</th>
-                            <th>Spearman</th>
-                            <th>DTW</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="background-color: #fffacd;">
-                            <td>2020 COVID Pandemic</td>
-                            <td>Gold</td>
-                            <td>3 Months</td>
-                            <td>100.0</td>
-                            <td>79.3</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>SP500</td>
-                            <td>3 Months</td>
-                            <td>100.0</td>
-                            <td>90.5</td>
-                        </tr>
-                        <tr>
-                            <td>2001 Dot-Com Bust</td>
-                            <td>SP500</td>
-                            <td>3 Months</td>
-                            <td>100.0</td>
-                            <td>88.7</td>
-                        </tr>
-                        <tr>
-                            <td>1990 Gulf War Oil Shock</td>
-                            <td>Gold</td>
-                            <td>3 Months</td>
-                            <td>100.0</td>
-                            <td>92.5</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>VIX</td>
-                            <td>3 Months</td>
-                            <td>100.0</td>
-                            <td>85.5</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>Gold</td>
-                            <td>3 Months</td>
-                            <td>100.0</td>
-                            <td>85.0</td>
-                        </tr>
-                        <tr style="background-color: #fffacd;">
-                            <td>2020 COVID Pandemic</td>
-                            <td>VIX</td>
-                            <td>3 Months</td>
-                            <td>100.0</td>
-                            <td>90.0</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>Interest</td>
-                            <td>6 Months</td>
-                            <td>97.1</td>
-                            <td>90.9</td>
-                        </tr>
-                        <tr style="background-color: #fffacd;">
-                            <td>2020 COVID Pandemic</td>
-                            <td>Interest</td>
-                            <td>1 Year</td>
-                            <td>96.3</td>
-                            <td>93.0</td>
-                        </tr>
-                        <tr style="background-color: #fffacd;">
-                            <td>2020 COVID Pandemic</td>
-                            <td>Gold</td>
-                            <td>1 Year</td>
-                            <td>93.4</td>
-                            <td>87.7</td>
-                        </tr>
-                        <tr>
-                            <td>1969 Vietnam/Fed Tightening</td>
-                            <td>Unemployment</td>
-                            <td>3 Months</td>
-                            <td>93.3</td>
-                            <td>71.1</td>
-                        </tr>
-                        <tr>
-                            <td>1990 Gulf War Oil Shock</td>
-                            <td>Unemployment</td>
-                            <td>3 Months</td>
-                            <td>93.3</td>
-                            <td>71.1</td>
-                        </tr>
-                        <tr>
-                            <td>1973 Oil Embargo Stagflation</td>
-                            <td>Unemployment</td>
-                            <td>3 Months</td>
-                            <td>93.3</td>
-                            <td>71.1</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>SP500</td>
-                            <td>2 Years</td>
-                            <td>91.8</td>
-                            <td>92.5</td>
-                        </tr>
-                        <tr style="background-color: #add8e6;">
-                            <td>2008 Great Recession</td>
-                            <td>Gold</td>
-                            <td>6 Months</td>
-                            <td>91.4</td>
-                            <td>88.5</td>
-                        </tr>
-                        <tr style="background-color: #fffacd;">
-                            <td>2020 COVID Pandemic</td>
-                            <td>Interest</td>
-                            <td>6 Months</td>
-                            <td>91.0</td>
-                            <td>87.7</td>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-                <br>
-                <h3>1.4. Conclusion</h3>
+            <section>
+                <h2>3. Final Conclusion</h2>
                 <p>Across all indicators and time windows analyzed, the <strong>current economic environment
                         (2024–2026)</strong> most
                     consistently resembles the period leading up to the <strong>2008 Great Recession</strong>, with the
@@ -355,7 +141,6 @@
                     observed here is difficult to dismiss. <strong>The data does not predict a recession with
                         certainty, but the signals are strong enough that they should not be ignored.</strong>
                 </p>
-
             </section>
         </main>
 
