@@ -22,46 +22,34 @@
 
             <section id="project-summary">
                 <h2>Project Summary</h2>
-                <p>Recessions have been a recurring part of U.S. economic history—from the 1973–1975 energy crisis to
-                    the 2007–2009 housing collapse and the 2020 COVID-19 downturn. These events have wide-reaching
-                    impacts on employment, housing affordability, financial markets, and overall economic stability.
-                    Despite their significance, recessions are often only recognized after substantial damage has
-                    already occurred.</p>
-                <p>This project aims to identify early warning signs of recessions by analyzing historical U.S. economic
-                    and financial data from 1960 to 2024. By combining government economic data with financial market
-                    indicators, the analysis seeks to provide a more comprehensive and less biased view of economic
-                    conditions.</p>
-                <p>Key variables include unemployment rates, GDP growth, inflation, housing prices, the federal funds
-                    rate, stock market performance (S&P 500), market volatility (VIX), and the yield curve slope. These
-                    indicators have been widely studied and are known to reflect different aspects of the economy.</p>
-                <p>The project begins with exploratory data analysis to uncover recurring patterns that appear in the
-                    months leading up to past recessions (typically 3–12 months prior). It then applies machine learning
-                    techniques—such as logistic regression and time-series modeling—to test whether these patterns
-                    consistently signal upcoming downturns.</p>
-                <p>The goal is to better understand whether recessions can be anticipated earlier, potentially helping
-                    individuals, businesses, and policymakers make more informed decisions.</p>
+                <p>
+                    Recessions are typically only identified after they have already caused widespread economic damage.
+                    This project aims to detect early warning signs of U.S. recessions by analyzing key economic and
+                    financial indicators (like Unemployment, Inflation, S&P 500, and VIX) from 1968 to 2026.
+                </p>
+                <p>
+                    To study how these indicators behaved in the months leading up to past recessions, we use
+                    exploratory data analysis and quantitative modeling to find recurring patterns. The ultimate goal is
+                    to determine if current economic conditions resemble historical pre-recession environments,
+                    providing earlier and clearer signals for the future.
+                </p>
             </section>
 
             <div class="content-grid">
                 <section id="broader-impacts">
                     <h2>Broader Impacts</h2>
-                    <p>Economic downturns can disrupt careers, reduce incomes, and create financial challenges,
-                        especially for young adults and financially vulnerable communities. This project aims to improve
-                        public awareness of the early warning signs that often appear before recessions, helping
-                        individuals and organizations make more informed financial decisions. By identifying consistent
-                        patterns in macroeconomic and financial indicators, the research can support better preparation
-                        before economic conditions significantly decline.</p>
-                    <p>For students and early-career professionals, understanding recession signals can encourage
-                        proactive financial behaviors, such as building emergency savings, diversifying income sources,
-                        and managing debt responsibly. Small businesses may benefit from earlier strategic adjustments
-                        in hiring, inventory, or investment planning. Investors and financial institutions could also
-                        use clearer signals to improve risk management and portfolio allocation decisions.</p>
-                    <p>From a policy perspective, identifying reliable early indicators may contribute to more timely
-                        and targeted economic responses. In addition, this project promotes data literacy by
-                        demonstrating how historical economic data and machine learning methods can be applied to
-                        real-world challenges. By making complex economic trends more understandable, the research
-                        supports stronger financial preparedness and long-term economic resilience across communities.
-                    </p>
+                    <ul>
+                        <li><strong>Public Awareness:</strong> Helps everyday people understand economic warning signs
+                            to make informed financial decisions.</li>
+                        <li><strong>Personal Finance:</strong> Encourages proactive behaviors like building emergency
+                            savings and managing debt responsibly before a downturn.</li>
+                        <li><strong>Business Strategy:</strong> Allows small businesses to adjust hiring, inventory, and
+                            investments ahead of economic shifts.</li>
+                        <li><strong>Risk Management:</strong> Provides investors and financial institutions with clearer
+                            signals for portfolio allocation.</li>
+                        <li><strong>Policy Responses:</strong> Helps policymakers identify reliable early indicators for
+                            more timely and targeted economic interventions.</li>
+                    </ul>
                 </section>
 
                 <section id="data-sources">
@@ -99,6 +87,53 @@
                     </ol>
                 </section>
             </div>
+
+            <section id="historical-recessions">
+                <h2>8 US Economic Recessions</h2>
+                <p>This project analyzes eight major U.S. recessions, each driven by unique economic triggers:</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Recession</th>
+                            <th>Primary Cause</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1969 Vietnam/Fed Tightening</strong></td>
+                            <td>Post-war spending + aggressive Fed rate hikes to control inflation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1973 Oil Embargo Stagflation</strong></td>
+                            <td>OPEC oil embargo caused energy crisis and stagflation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1980 Volcker Inflation Fight</strong></td>
+                            <td>Paul Volcker's Fed sharply raised rates to break the inflation cycle</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1981 High Interest Rates</strong></td>
+                            <td>Continuation of Volcker policy; deepest post-WWII unemployment at the time</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1990 Gulf War Oil Shock</strong></td>
+                            <td>Gulf War oil shock combined with the savings and loan crisis</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2001 Dot-Com Bust</strong></td>
+                            <td>Collapse of overvalued tech sector, stock market crash, 9/11</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2008 Great Recession</strong></td>
+                            <td>Housing bubble collapse, banking system failure, credit freeze</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2020 COVID Pandemic</strong></td>
+                            <td>Sudden global pandemic-driven economic shutdown</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
 
             <section id="analysis">
                 <h2>Analysis</h2>

@@ -93,6 +93,56 @@
                     </table>
                 </div>
 
+                <p style="margin-top: 1.5rem;">
+                    As shown in the table, the given data was recorded in different frequencies, so all indicators were
+                    converted to a standard monthly frequency to allow for direct comparison. The data was then merged
+                    with the recession indicator dataframe. As data for VIX and Gold are only available starting from
+                    1990, the dataset was split into two segments: one covering 1968-2026 (Unemployment, Inflation,
+                    Interest rates, and S&P 500) and another covering 1990-2026 (VIX, Gold, and Oil).
+                </p>
+
+                <p>
+                    Furthermore, the indicators have completely different value ranges (e.g., S&P 500 in thousands vs.
+                    Interest rates in small percentages). To plot and compare them effectively, two different scaling
+                    techniques were applied throughout the analysis: <b>Min-Max Normalization</b> and <b>Z-score
+                        Standardization</b>.
+                </p>
+
+                <details class="zscore-highlight" style="cursor: pointer; margin-bottom: 1rem;">
+                    <summary style="font-weight: bold; color: var(--link-color);">Min-Max Normalization</summary>
+                    <div style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">
+                        <p><b>Where and Why:</b> Used in Section 3 (Visualization Analysis) to scale all indicators
+                            between 0 and 1. This allows us to plot long-term trends of vastly different indicators
+                            (like S&P 500 and Unemployment) on the same graph to see their overall directional movements
+                            over decades.</p>
+                        <p style="margin-bottom: 0.5rem;"><b>Formula:</b>
+                            <code>X_norm = (X - X_min) / (X_max - X_min)</code>
+                        </p>
+                        <ul style="margin-bottom: 0;">
+                            <li><b>X</b>: The original data value</li>
+                            <li><b>X_min</b>: The minimum value of the indicator</li>
+                            <li><b>X_max</b>: The maximum value of the indicator</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="zscore-highlight" style="cursor: pointer; margin-bottom: 1.5rem;">
+                    <summary style="font-weight: bold; color: var(--link-color);">Z-score Standardization</summary>
+                    <div style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">
+                        <p><b>Where and Why:</b> Used in Section 3.1 (Average Indicator Trajectory) to evaluate how much
+                            each indicator deviates from its historical average in the months leading up to a recession.
+                            Because it centers the data around 0 and scales by variance, we can directly compare the
+                            relative "spike" or "drop" intensities (e.g., measuring market fear vs. interest rate hikes)
+                            in standard deviation units.</p>
+                        <p style="margin-bottom: 0.5rem;"><b>Formula:</b> <code>Z = (X - μ) / σ</code></p>
+                        <ul style="margin-bottom: 0;">
+                            <li><b>X</b>: The original data value</li>
+                            <li><b>μ</b>: The mean (average) of the indicator</li>
+                            <li><b>σ</b>: The standard deviation (spread) of the indicator</li>
+                        </ul>
+                    </div>
+                </details>
+
             </section>
 
 
@@ -113,7 +163,7 @@
                         <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                             <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
                             <pre
-                                style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># ── Normalize df_1968 for plotting ───────────────────────────────────────────
+                                style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># Normalize df_1968 for plotting 
 scaled_1968 = df_1968.copy()
 indicators_1968 = ["Unemployment", "Inflation", "Interest", "SP500"]
 
@@ -122,11 +172,11 @@ for col in indicators_1968:
     col_max = scaled_1968[col].max()
     scaled_1968[col] = (scaled_1968[col] - col_min) / (col_max - col_min)
 
-# ── Line graph comparison ─────────────────────────────────────────────────────
+# Line graph comparison 
 plt.figure(figsize=(14, 8))
 
 for col in indicators_1968:
-    plt.plot(scaled_1968.index, scaled_1968[col], label=col)
+    plt.plot(scaled_1968.index, scaled_1968[col], label=col, color=COLOR_MAP.get(col, 'blue'))
 
 # Highlight recession periods
 start = None
@@ -134,13 +184,13 @@ for date in scaled_1968.index:
     if scaled_1968.loc[date, "Recession"] == 1 and start is None:
         start = date
     elif scaled_1968.loc[date, "Recession"] == 0 and start is not None:
-        plt.axvspan(start, date, alpha=0.15)
+        plt.axvspan(start, date, alpha=0.15, color='gray')
         start = None
 
 if start is not None:
-    plt.axvspan(start, scaled_1968.index[-1], alpha=0.15)
+    plt.axvspan(start, scaled_1968.index[-1], alpha=0.15, color='gray')
 
-plt.axhline(0.5, linestyle="--")  # midpoint line at 0.5 for normalized data
+plt.axhline(0.5, linestyle="--", color='black')  # midpoint line at 0.5 for normalized data
 
 plt.legend(fontsize=10)
 plt.title("Normalized Unemployment, Inflation, Interest and SP500 Indicators with Recession Periods Highlighted", fontsize=14)
@@ -149,7 +199,9 @@ plt.ylabel("Normalized Value [0–1]")
 plt.xticks(rotation=45)
 
 plt.tight_layout()
-plt.show()</code></pre>
+plt.savefig("line_graph_1968.png")
+plt.show()
+</code></pre>
                         </details>
                         <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                             <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
@@ -167,7 +219,7 @@ plt.show()</code></pre>
                         <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                             <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
                             <pre
-                                style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># ── Normalize df_1990 for plotting ───────────────────────────────────────────
+                                style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># Normalize df_1990 for plotting
 scaled_1990 = df_1990.copy()
 indicators_1990 = ["Oil", "VIX", "Gold"]
 
@@ -176,11 +228,11 @@ for col in indicators_1990:
     col_max = scaled_1990[col].max()
     scaled_1990[col] = (scaled_1990[col] - col_min) / (col_max - col_min)
 
-# ── Line graph comparison ─────────────────────────────────────────────────────
+# Line graph comparison
 plt.figure(figsize=(14, 8))
 
 for col in indicators_1990:
-    plt.plot(scaled_1990.index, scaled_1990[col], label=col)
+    plt.plot(scaled_1990.index, scaled_1990[col], label=col, color=COLOR_MAP.get(col, 'black'))
 
 # Highlight recession periods
 start = None
@@ -188,13 +240,13 @@ for date in scaled_1990.index:
     if scaled_1990.loc[date, "Recession"] == 1 and start is None:
         start = date
     elif scaled_1990.loc[date, "Recession"] == 0 and start is not None:
-        plt.axvspan(start, date, alpha=0.15)
+        plt.axvspan(start, date, alpha=0.15, color='gray')
         start = None
 
 if start is not None:
-    plt.axvspan(start, scaled_1990.index[-1], alpha=0.15)
+    plt.axvspan(start, scaled_1990.index[-1], alpha=0.15, color='gray')
 
-plt.axhline(0.5, linestyle="--")  # midpoint line at 0.5 for normalized data
+plt.axhline(0.5, linestyle="--", color='black')  # midpoint line at 0.5 for normalized data
 
 plt.legend(fontsize=10)
 plt.title("Normalized Oil, VIX and Gold Indicators with Recession Periods Highlighted", fontsize=14)
@@ -203,7 +255,10 @@ plt.ylabel("Normalized Value [0–1]")
 plt.xticks(rotation=45)
 
 plt.tight_layout()
-plt.show()</code></pre>
+plt.savefig("line_graph_1990.png")
+plt.show()
+
+</code></pre>
                         </details>
                         <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                             <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
@@ -241,12 +296,7 @@ plt.show()</code></pre>
                     <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                         <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
                         <pre
-                            style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code>import plotly.graph_objects as go
-import plotly.graph_objects as go
-from sklearn.preprocessing import StandardScaler
-
-# df_1968: Unemployment, Inflation, Interest, SP500 (from 1968)
-
+                            style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># Trajectory 1968 
 scaled_1968 = df_1968.loc["1968":].copy()
 scaler_1968 = StandardScaler()
 indicators_1968 = ["Unemployment", "Inflation", "Interest", "SP500"]
@@ -266,6 +316,7 @@ for col in traj_1968.columns:
         y=traj_1968[col],
         mode="lines",
         name=col,
+        line=dict(color=COLOR_MAP.get(col, 'blue')),
         hovertemplate=f"<b>{col}</b><br>Month: %{{x}}<br>Z-score: %{{y:.2f}}<extra></extra>"
     ))
 
@@ -286,8 +337,9 @@ fig_1968.update_layout(
     template="plotly_white"
 )
 
+fig_1968.write_html("economic_chart_1968.html", include_plotlyjs="cdn", full_html=True)
 fig_1968.show()
-fig_1968.write_html("economic_chart_1968.html", include_plotlyjs="cdn", full_html=True)</code></pre>
+</code></pre>
                     </details>
                     <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                         <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
@@ -309,36 +361,34 @@ fig_1968.write_html("economic_chart_1968.html", include_plotlyjs="cdn", full_htm
                     <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                         <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
                         <pre
-                            style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code>import plotly.graph_objects as go
-import plotly.graph_objects as go
-from sklearn.preprocessing import StandardScaler
+                            style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># Trajetory 1990
+scaled_1990 = df_1990.copy()
+indicators_1990 = ["Oil", "VIX", "Gold"]
 
-scaled_df = financial_df.copy()
-scaler = StandardScaler()
-scaled_df[["SP500","VIX","Gold"]] = scaler.fit_transform(
-    scaled_df[["SP500","VIX","Gold"]]
-)
+for col in indicators_1990:
+    col_min = scaled_1990[col].min()
+    col_max = scaled_1990[col].max()
+    scaled_1990[col] = (scaled_1990[col] - col_min) / (col_max - col_min)
 
-# trajectory function
-traj = indicator_trajectory(
-    scaled_df,
-    indicators=["SP500","VIX","Gold"],
+traj_1990 = indicator_trajectory(
+    scaled_1990,
+    indicators=indicators_1990,
     months_before=24
 )
 
-# plot with Plotly
-fig = go.Figure()
+fig_1990 = go.Figure()
 
-for col in traj.columns:
-    fig.add_trace(go.Scatter(
-        x=traj.index,
-        y=traj[col],
+for col in traj_1990.columns:
+    fig_1990.add_trace(go.Scatter(
+        x=traj_1990.index,
+        y=traj_1990[col],
         mode="lines",
         name=col,
-        hovertemplate=f"&lt;b&gt;{col}&lt;/b&gt;&lt;br&gt;Month: %{{x}}&lt;br&gt;Z-score: %{{y:.2f}}&lt;extra&gt;&lt;/extra&gt;"
+        line=dict(color=COLOR_MAP.get(col, 'black')),
+        hovertemplate=f"<b>{col}</b><br>Month: %{{x}}<br>Normalized: %{{y:.2f}}<extra></extra>"
     ))
 
-fig.add_vline(
+fig_1990.add_vline(
     x=0,
     line_dash="dash",
     line_color="black",
@@ -346,19 +396,17 @@ fig.add_vline(
     annotation_position="top right"
 )
 
-fig.update_layout(
-    title="Average Indicator Trajectory Before Recession (Standardized)",
+fig_1990.update_layout(
+    title="Average Indicator Trajectory Before Recession (Normalized)",
     xaxis_title="Months Before Recession",
-    yaxis_title="Standardized Value (Z-score)",
+    yaxis_title="Normalized Value (0–1)",
     hovermode="closest",
     legend_title="Indicator",
     template="plotly_white"
 )
 
-fig.show()
-
-# Financial indicators chart
-fig.write_html("financial_chart.html", include_plotlyjs="cdn", full_html=True)</code></pre>
+fig_1990.write_html("economic_chart_1990.html", include_plotlyjs="cdn", full_html=True)
+fig_1990.show()</code></pre>
                     </details>
                     <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                         <summary style="font-weight: bold; color: var(--link-color);">Description</summary>

@@ -16,31 +16,21 @@
         <main>
             <h1>Analysis Methods</h1>
             <section>
-                <h2>1. Methodology</h2>
-                <h3>1.1 Overview</h3>
+                <h2>1. Overview</h2>
                 <p>The analysis systematically measures how closely current U.S. economic indicator trends resemble the
                     pre-recession periods of eight historical U.S. recessions. Rather than relying on visual inspection
                     alone, two quantitative metrics are computed for every combination of recession, indicator, and time
                     window — producing a composite similarity score from 0 to 100.</p>
 
                 <br>
-                <h3>1.2. Indicators</h3>
-                <p>Six key economic indicators were selected to capture different facets of the economy:</p>
-                <ul>
-                    <li><strong>Unemployment</strong> — the unemployment rate (seasonally adjusted)</li>
-                    <li><strong>Interest rates</strong> — the federal funds rate (monthly average)</li>
-                    <li><strong>Oil prices</strong> — the price of West Texas Intermediate crude oil (monthly average)
-                    </li>
-                    <li><strong>SP500</strong> — the S&P 500 index (monthly close)</li>
-                    <li><strong>VIX</strong> — the CBOE Volatility Index (daily close, monthly average)</li>
-                    <li><strong>Gold</strong> — the price of gold (monthly close)</li>
-                </ul>
+                <h2>2. Indicators</h2>
+                <p>For comparison with current data, we are not going to use Inflation data as the last updated data was
+                    in 2024.</p>
                 <br>
-                <h3>1.3 Time Windows Compared</h3>
+                <h2>3. Time Windows Compared</h2>
                 <p>For each recession, indicator data was extracted for six look-back windows ending at the month before
                     the recession officially began. The same windows were applied to current data ending March 2026.
-                    This allows a like-for-like comparison of how each indicator behaved at equivalent points in time
-                    before each historical recession versus today.</p>
+                </p>
 
                 <table class="table">
                     <thead>
@@ -78,7 +68,7 @@
                 </table>
 
                 <br>
-                <h3>1.4 Metric 1 — Spearman Rank Correlation</h3>
+                <h2>4. Metric 1 — Spearman Rank Correlation</h2>
                 <p>Spearman Rank Correlation measures the monotonic relationship between two sequences. Unlike Pearson
                     correlation which looks for strict linear relationships, Spearman checks whether the values go up
                     and down together, even if the scale or rate of change varies. The raw output is a coefficient
@@ -99,9 +89,24 @@
                 <p>A high score (near 100) indicates the two time series move in the exact same direction at the same
                     time. A low score (near 0) indicates the series move in completely opposite directions, showing
                     no similarity in trend.</p>
+                <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                    <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
+                    <pre
+                        style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code>def spearman_similarity(a: np.ndarray, b: np.ndarray) -> float:
+    """
+    Spearman rank correlation rescaled from [-1,1] to [0,100].
+    Values near 100 mean the two series move in exactly the same direction.
+    Returns 50 (neutral) when one series is constant.
+    """
+    if len(a) < 3 or np.std(a) == 0 or np.std(b) == 0:
+        return 50.0
+    r, _ = spearmanr(a, b)
+    # Map [-1, 1] → [0, 100]
+    return (r + 1) / 2 * 100</code></pre>
+                </details>
 
                 <br>
-                <h3>1.5 Metric 2 — Dynamic Time Warping (DTW)</h3>
+                <h2>5. Metric 2 — Dynamic Time Warping (DTW)</h2>
                 <p>Dynamic Time Warping (DTW) measures how similar two curves look, even if one is slightly
                     shifted in time. For example, if unemployment spiked one month later in a past recession compared
                     to today, DTW can still recognise that the overall shape is the same.</p>
@@ -114,52 +119,103 @@
                 <p>A high score (near 100) means the shapes of the two series closely match. A low score means the
                     shapes are very different.</p>
 
-                <br>
-                <h3>1.6 Recessions Analysed</h3>
-                <p>Eight U.S. recessions were included, covering a range of economic triggers:</p>
+                <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                    <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
+                    <pre
+                        style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code>def dtw_similarity(a: np.ndarray, b: np.ndarray) -> float:
+    """
+    Dynamic Time Warping distance converted to a similarity score [0, 100].
+    DTW handles slight phase shifts better than plain Euclidean distance.
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Recession</th>
-                            <th>Primary Cause</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>1969 Vietnam/Fed Tightening</strong></td>
-                            <td>Post-war spending + aggressive Fed rate hikes to control inflation</td>
-                        </tr>
-                        <tr>
-                            <td><strong>1973 Oil Embargo Stagflation</strong></td>
-                            <td>OPEC oil embargo caused energy crisis and stagflation</td>
-                        </tr>
-                        <tr>
-                            <td><strong>1980 Volcker Inflation Fight</strong></td>
-                            <td>Paul Volcker's Fed sharply raised rates to break the inflation cycle</td>
-                        </tr>
-                        <tr>
-                            <td><strong>1981 High Interest Rates</strong></td>
-                            <td>Continuation of Volcker policy; deepest post-WWII unemployment at the time</td>
-                        </tr>
-                        <tr>
-                            <td><strong>1990 Gulf War Oil Shock</strong></td>
-                            <td>Gulf War oil shock combined with the savings and loan crisis</td>
-                        </tr>
-                        <tr>
-                            <td><strong>2001 Dot-Com Bust</strong></td>
-                            <td>Collapse of overvalued tech sector, stock market crash, 9/11</td>
-                        </tr>
-                        <tr>
-                            <td><strong>2008 Great Recession</strong></td>
-                            <td>Housing bubble collapse, banking system failure, credit freeze</td>
-                        </tr>
-                        <tr>
-                            <td><strong>2020 COVID Pandemic</strong></td>
-                            <td>Sudden global pandemic-driven economic shutdown</td>
-                        </tr>
-                    </tbody>
-                </table>
+    We normalise the raw DTW distance by the maximum possible distance
+    (all-ones vs all-zeros for min-max scaled data) so results are comparable
+    across different window lengths.
+    """
+    if len(a) < 2 or len(b) < 2:
+        return 50.0
+
+    # dtaidistance expects float64 arrays
+    a64 = a.astype(np.float64)
+    b64 = b.astype(np.float64)
+
+    dist = dtw.distance_fast(a64, b64)
+
+    # Maximum possible DTW distance for sequences of this length (all 0 vs all 1)
+    max_dist = np.sqrt(len(a))  # rough upper bound for [0,1] normalised data
+
+    similarity = max(0.0, (1 - dist / max_dist)) * 100
+    return similarity</code></pre>
+                </details>
+
+                <br>
+                <h2>6. 1-Year Trend Comparison</h2>
+                <p>For each indicator, the model extracts the 12 months of data leading up to today and the 12 months leading up to each historical recession start. Both series are normalised to a [0, 1] scale so that indicators with different units can be compared fairly.</p>
+                <p>Both the Spearman and DTW scores are then computed on these 12-month windows — meaning the scores reflect how similar the entire year-long trend looks, not any single month in isolation. A high score means the shape of the current 12-month trajectory closely resembles how that indicator behaved in the year before a past recession.</p>
+
+                <h3>Example</h3>
+                <p>Say we are comparing unemployment today against the 1973 recession. After extracting and normalising both series, we get two 12-month arrays:</p>
+                <pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; margin-bottom: 15px;"><code>Current (2025):      [0.10, 0.15, 0.20, 0.28, 0.35, 0.42, 0.50, 0.55, 0.60, 0.70, 0.75]
+1973 recession:      [0.12, 0.18, 0.23, 0.30, 0.38, 0.45, 0.52, 0.57, 0.63, 0.68, 0.72, 0.78]</code></pre>
+                
+                <p>Both arrays are fed into the similarity functions in one go:</p>
+                <pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; margin-bottom: 15px;"><code>spearman_similarity([0.10, 0.15, ...], [0.12, 0.18, ...]) -> 0.98 -> rescaled to 99
+dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to 95</code></pre>
+
+                <p>Both scores are high because the two series rise steadily at the same pace — the shapes are nearly identical. This would place the 1973 recession among the top matches for unemployment.</p>
+
+                <details style="margin-top: 10px; text-align: left; cursor: pointer;">
+                    <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
+                    <pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code>def plot_overlay_per_indicator(df: pd.DataFrame, results: pd.DataFrame, metric: str = "Spearman"):
+    window_label = "1 Year"
+    n_months = TIME_WINDOWS[window_label]
+
+    top_matches = (
+        results[results["Window"] == window_label]
+        .sort_values(metric, ascending=False)
+        .groupby("Indicator")
+        .head(2)
+    )
+
+    indicators = list(INDICATORS.keys())
+
+    for indicator in indicators:
+        fig, ax = plt.subplots(1, 1, figsize=(14, 5))
+        curr = extract_window(df, CURRENT_END, n_months)[indicator].dropna()
+        curr_norm = normalise(curr)
+        x_curr = np.linspace(-n_months, 0, len(curr_norm))
+        ax.plot(x_curr, curr_norm.values, color="black", linewidth=2.5,
+                label="Current (2024–2026)", zorder=5)
+
+        colors = ["#e41a1c", "#377eb8"]
+        indicator_matches = top_matches[top_matches["Indicator"] == indicator]
+
+        for i, (_, row) in enumerate(indicator_matches.iterrows()):
+            recession_start = RECESSIONS[row["Recession"]]
+            hist = extract_window(df, recession_start, n_months)[indicator].dropna()
+            hist_norm = normalise(hist)
+            x_hist = np.linspace(-n_months, 0, len(hist_norm))
+            label = f"{row['Recession']} ({metric}: {row[metric]:.0f})"
+            ax.plot(x_hist, hist_norm.values, color=colors[i],
+                    linewidth=1.8, linestyle="--", alpha=0.85, label=label)
+
+        ax.set_title(
+            f"{indicator} — Normalised Trend (1 Year Before Recession/Today)",
+            fontsize=11
+        )
+        ax.set_xlabel("Months Before Recession Start / Today (0 = recession start / today)")
+        ax.set_ylabel("Normalised Value [0–1]")
+        ax.legend(fontsize=9, loc="upper left")
+        ax.grid(True, alpha=0.3)
+        ax.set_xlim(-n_months - 0.5, 0.5)
+
+        plt.suptitle(
+            f"Current Indicator Trends vs Top 2 Matches ({metric})\n"
+            "(1-Year Look-back Window, Min-Max Normalised)",
+            fontsize=13
+        )
+        plt.tight_layout()
+        plt.show()</code></pre>
+                </details>
             </section>
         </main>
 
