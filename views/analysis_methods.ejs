@@ -21,54 +21,11 @@
                     pre-recession periods of eight historical U.S. recessions. Rather than relying on visual inspection
                     alone, two quantitative metrics are computed for every combination of recession, indicator, and time
                     window — producing a composite similarity score from 0 to 100.</p>
-
-                <br>
                 <h2>2. Indicators</h2>
                 <p>For comparison with current data, we are not going to use Inflation data as the last updated data was
                     in 2024.</p>
-                <br>
-                <h2>3. Time Windows Compared</h2>
-                <p>For each recession, indicator data was extracted for six look-back windows ending at the month before
-                    the recession officially began. The same windows were applied to current data ending March 2026.
-                </p>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Window</th>
-                            <th>Interpretation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>1 Month</strong></td>
-                            <td>Very near-term momentum — the most recent trend direction</td>
-                        </tr>
-                        <tr>
-                            <td><strong>2 Months</strong></td>
-                            <td>Short-term trend — captures early shifts in indicator direction</td>
-                        </tr>
-                        <tr>
-                            <td><strong>3 Months</strong></td>
-                            <td>Quarter-level trend — most useful for fast-moving indicators (VIX, Oil, SP500)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>6 Months</strong></td>
-                            <td>Medium-term trend — captures policy-response lags (e.g. Fed rate decisions)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>1 Year</strong></td>
-                            <td>One-year arc — most useful for slow-moving indicators (Unemployment, Interest)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>2 Years</strong></td>
-                            <td>Full cycle view — captures the macro environment leading into a recession</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <br>
-                <h2>4. Metric 1 — Spearman Rank Correlation</h2>
+                <h2>3. Metric 1 — Spearman Rank Correlation</h2>
                 <p>Spearman Rank Correlation measures the monotonic relationship between two sequences. Unlike Pearson
                     correlation which looks for strict linear relationships, Spearman checks whether the values go up
                     and down together, even if the scale or rate of change varies. The raw output is a coefficient
@@ -106,7 +63,7 @@
                 </details>
 
                 <br>
-                <h2>5. Metric 2 — Dynamic Time Warping (DTW)</h2>
+                <h2>4. Metric 2 — Dynamic Time Warping (DTW)</h2>
                 <p>Dynamic Time Warping (DTW) measures how similar two curves look, even if one is slightly
                     shifted in time. For example, if unemployment spiked one month later in a past recession compared
                     to today, DTW can still recognise that the overall shape is the same.</p>
@@ -148,24 +105,34 @@
                 </details>
 
                 <br>
-                <h2>6. 1-Year Trend Comparison</h2>
-                <p>For each indicator, the model extracts the 12 months of data leading up to today and the 12 months leading up to each historical recession start. Both series are normalised to a [0, 1] scale so that indicators with different units can be compared fairly.</p>
-                <p>Both the Spearman and DTW scores are then computed on these 12-month windows — meaning the scores reflect how similar the entire year-long trend looks, not any single month in isolation. A high score means the shape of the current 12-month trajectory closely resembles how that indicator behaved in the year before a past recession.</p>
+                <h2>5. 1-Year Trend Comparison</h2>
+                <p>For each indicator, the model extracts the 12 months of data leading up to today and the 12 months
+                    leading up to each historical recession start. Both series are normalised to a [0, 1] scale so that
+                    indicators with different units can be compared fairly.</p>
+                <p>Both the Spearman and DTW scores are then computed on these 12-month windows — meaning the scores
+                    reflect how similar the entire year-long trend looks, not any single month in isolation. A high
+                    score means the shape of the current 12-month trajectory closely resembles how that indicator
+                    behaved in the year before a past recession.</p>
 
                 <h3>Example</h3>
-                <p>Say we are comparing unemployment today against the 1973 recession. After extracting and normalising both series, we get two 12-month arrays:</p>
-                <pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; margin-bottom: 15px;"><code>Current (2025):      [0.10, 0.15, 0.20, 0.28, 0.35, 0.42, 0.50, 0.55, 0.60, 0.70, 0.75]
+                <p>Say we are comparing unemployment today against the 1973 recession. After extracting and normalising
+                    both series, we get two 12-month arrays:</p>
+                <pre
+                    style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; margin-bottom: 15px;"><code>Current (2025):      [0.10, 0.15, 0.20, 0.28, 0.35, 0.42, 0.50, 0.55, 0.60, 0.70, 0.75]
 1973 recession:      [0.12, 0.18, 0.23, 0.30, 0.38, 0.45, 0.52, 0.57, 0.63, 0.68, 0.72, 0.78]</code></pre>
-                
+
                 <p>Both arrays are fed into the similarity functions in one go:</p>
-                <pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; margin-bottom: 15px;"><code>spearman_similarity([0.10, 0.15, ...], [0.12, 0.18, ...]) -> 0.98 -> rescaled to 99
+                <pre
+                    style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; margin-bottom: 15px;"><code>spearman_similarity([0.10, 0.15, ...], [0.12, 0.18, ...]) -> 0.98 -> rescaled to 99
 dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to 95</code></pre>
 
-                <p>Both scores are high because the two series rise steadily at the same pace — the shapes are nearly identical. This would place the 1973 recession among the top matches for unemployment.</p>
+                <p>Both scores are high because the two series rise steadily at the same pace — the shapes are nearly
+                    identical. This would place the 1973 recession among the top matches for unemployment.</p>
 
                 <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                     <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
-                    <pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code>def plot_overlay_per_indicator(df: pd.DataFrame, results: pd.DataFrame, metric: str = "Spearman"):
+                    <pre
+                        style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code>def plot_overlay_per_indicator(df: pd.DataFrame, results: pd.DataFrame, metric: str = "Spearman"):
     window_label = "1 Year"
     n_months = TIME_WINDOWS[window_label]
 
@@ -218,7 +185,7 @@ dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to
                 </details>
 
                 <br>
-                <h3>6.1. Analysis Findings: 1-Year Trend Comparison</h3>
+                <h3>5.1. Analysis Findings: 1-Year Trend Comparison</h3>
                 <p>
                     Now, let's compare each economic indicators separately to see how the current trend (2024-2026)
                     compares to past pre-recession periods.
@@ -268,7 +235,7 @@ dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to
                     </tbody>
                 </table>
 
-                <h4>6.1.1. Unemployment:</h4>
+                <h4>5.1.1. Unemployment:</h4>
 
                 <div class="content-grid">
                     <figure>
@@ -279,7 +246,7 @@ dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to
                     </figure>
                 </div>
 
-                <h4>6.1.2. Interest rates:</h4>
+                <h4>5.1.2. Interest rates:</h4>
 
                 <div class="content-grid">
                     <figure>
@@ -290,7 +257,7 @@ dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to
                     </figure>
                 </div>
 
-                <h4>6.1.3. Oil prices:</h4>
+                <h4>5.1.3. Oil prices:</h4>
 
                 <div class="content-grid">
                     <figure>
@@ -301,7 +268,7 @@ dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to
                     </figure>
                 </div>
 
-                <h4>6.1.4. SP500:</h4>
+                <h4>5.1.4. SP500:</h4>
 
                 <div class="content-grid">
                     <figure>
@@ -312,7 +279,7 @@ dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to
                     </figure>
                 </div>
 
-                <h4>6.1.5. VIX:</h4>
+                <h4>5.1.5. VIX:</h4>
 
                 <div class="content-grid">
                     <figure>
@@ -323,7 +290,7 @@ dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to
                     </figure>
                 </div>
 
-                <h4>6.1.6. Gold:</h4>
+                <h4>5.1.6. Gold:</h4>
 
                 <div class="content-grid">
                     <figure>
@@ -343,48 +310,12 @@ dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to
                     cycles.
                 </p>
 
-
-
-                <!--
                 <br>
-                <h3>Similarity by Time Window (averaged across all indicators)</h3>
-                <figure>
-                    <img src="/images/Major%20findings/average-across-indicators.png" alt="Similarity by Time Window">
-                </figure>
-                <p>The current economic trend most <strong>closely</strong> resembles the <strong>2008 Great
-                        Recession</strong> pre-recession period,
-                    consistently scoring the highest similarity across nearly all look-back windows — peaking at 79.0 at
-                    the 1-year mark. The <strong>2020 COVID Pandemic</strong> and <strong>1981 High Interest
-                        Rates</strong>
-                    periods also show elevated
-                    similarity, particularly at shorter and longer time windows respectively. Similarity scores are
-                    generally weakest for the 1980 Volcker Inflation Fight, suggesting today's environment diverges most
-                    from that era. The 1-year look-back window tends to produce the strongest signal across most
-                    recessions, making it the most informative timeframe for comparison.</p>
-
-                <br>
-                <h3>Similarity by Economic Indicator (averaged across all time windows)</h3>
-                <figure>
-                    <img src="/images/Major%20findings/average-across-time-windows.png"
-                        alt="Similarity by Economic Indicator">
-                </figure>
-                <p><strong>Gold</strong> and <strong>SP500</strong> are the strongest differentiating indicators, with
-                    Gold showing
-                    near-identical
-                    behavior to both the <strong>2008 Great Recession</strong> (86.9) and <strong>2020 COVID
-                        Pandemic</strong> (84.6). SP500 aligns
-                    closely with the <strong>2008 recession</strong> (84.0) and <strong>1981 High Interest
-                        Rates</strong> (82.4). Interest rates tell a
-                    more mixed story — showing low similarity to stagflation-era recessions (29.3–30.2) but moderate
-                    alignment elsewhere. Oil and VIX show the most variability, with Oil diverging significantly from
-                    the <strong>1990 Gulf War shock</strong> (29.7) and VIX doing the same for that period (26.7).
-                    Overall, the
-                    indicator-level breakdown confirms that 2008 and 2020 are the dominant analogues, driven primarily
-                    by gold and equity market behavior.</p>
-                -->
-
-                <br>
-                <h2>7. Top 15 Similarity Scores</h2>
+                <h2>6. Top 15 Similarity Scores</h2>
+                <p>The following table shows the top 15 similarity scores. From this table, we can see that 2008 and
+                    2020
+                    are the two most common recessions with the highest similarity scores.
+                </p>
                 <table class="table">
                     <thead>
                         <tr>
@@ -511,6 +442,27 @@ dtw_similarity([0.10, 0.15, ...], [0.12, 0.18, ...])      -> 0.95 -> rescaled to
 
                     </tbody>
                 </table>
+
+                <h3>7. Overall Recession Similarity Ranking</h3>
+                <p>The two bar graphs below rank all eight recessions by their average similarity score across all
+                    <strong>six indicators</strong> and all <strong>six time windows</strong>.
+                </p>
+
+                <figure>
+                    <img src="/images/Major%20findings/Overall-Recession-similarity.png"
+                        alt="Overall Recession Similarity Ranking">
+                    <figcaption>Figure 3. Overall Recession Similarity Ranking.</figcaption>
+                </figure>
+
+                <p>Two recessions stand out as statistically notable matches to the current economic environment:</p>
+                <ul>
+                    <li><strong>2008</strong> is the clearest match to today, with the highest similarity in both
+                        measures, followed by <strong>2020</strong> as the second closest.</li>
+                    <li>Most other recessions show only moderate similarity (scores mostly between 40–59), meaning
+                        today’s conditions are not strongly aligned with them.</li>
+                    <li>DTW scores are consistently higher than Spearman, suggesting the overall patterns/trends look
+                        similar, even if the exact relationships between indicators are weaker.</li>
+                </ul>
 
             </section>
         </main>

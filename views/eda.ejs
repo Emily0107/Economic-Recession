@@ -160,9 +160,9 @@
                         <figcaption>Figure 1. Normalized trends of unemployment, inflation, interest rates, and SP500
                             (1968-2026)
                         </figcaption>
-                        <details style="margin-top: 10px; text-align: left; cursor: pointer;">
-                            <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
-                            <pre
+                        <!-- <details style="margin-top: 10px; text-align: left; cursor: pointer;"> -->
+                        <!-- <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary> -->
+                        <!-- <pre
                                 style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># Normalize df_1968 for plotting 
 scaled_1968 = df_1968.copy()
 indicators_1968 = ["Unemployment", "Inflation", "Interest", "SP500"]
@@ -201,8 +201,8 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 plt.savefig("line_graph_1968.png")
 plt.show()
-</code></pre>
-                        </details>
+</code></pre> -->
+                        <!-- </details> -->
                         <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                             <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
                             <p style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">The graph shows how
@@ -216,9 +216,9 @@ plt.show()
                     <figure>
                         <img src="/images/line_graph_1990.png" alt="Indicators line graph from 1990 to 2026">
                         <figcaption>Figure 2. Normalized trends of VIX, Gold and Oil Prices (1990-2026)</figcaption>
-                        <details style="margin-top: 10px; text-align: left; cursor: pointer;">
-                            <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
-                            <pre
+                        <!-- <details style="margin-top: 10px; text-align: left; cursor: pointer;"> -->
+                        <!-- <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary> -->
+                        <!-- <pre
                                 style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># Normalize df_1990 for plotting
 scaled_1990 = df_1990.copy()
 indicators_1990 = ["Oil", "VIX", "Gold"]
@@ -258,8 +258,8 @@ plt.tight_layout()
 plt.savefig("line_graph_1990.png")
 plt.show()
 
-</code></pre>
-                        </details>
+</code></pre> -->
+                        <!-- </details> -->
                         <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                             <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
                             <p style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">The graph shows how Oil, VIX,
@@ -273,15 +273,36 @@ plt.show()
 
                 <details style="margin-top: 20px; text-align: left; cursor: pointer;">
                     <summary style="font-weight: bold; color: var(--link-color);">Zoom-In View for 24 months before each
-                        economic recession</summary>
+                        economic recession (Close-up View of 8 US Recessions from 1968-2026)</summary>
                     <div style="margin-top: 15px;">
                         <img src="/images/EDA/close_up_view_1968.png" alt="Zoom-in view 1968"
                             style="width: 100%; height: auto; margin-bottom: 20px;">
+                        <p style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">
+                            According to the 8 Economic Recession Data
+                        <ul>
+                            <li>Unemployment, Inflation and SP500 don't show much flauation before entering into
+                                recessions.</li>
+                            <li>On the other hand, interest rate was increasing rapidly before recession, except from
+                                2008 and 2020.</li>
+                        </ul>
+                        </p>
                         <img src="/images/EDA/close_up_view_1990.png" alt="Zoom-in view 1990"
                             style="width: 100%; height: auto;">
+
+                        <p>
+                            Oil and VIX data only starts in 1990.
+
+                            According to the 4 Economic recession Data,
+                        <ul>
+                            <li>Oil Prices increases sharply before 2008 housing crisis</li>
+                            <li>VIX increases in all 4 recession</li>
+                            <li>Gold prices remain steady with only a small increase in its value before 2008.</li>
+                        </ul>
+                        </p>
                     </div>
                 </details>
 
+                <br>
                 <h3 id="avg-trajectory">3.1. Average Indicator Trajectory Before Recession</h3>
 
                 <p>After checking the overall trends of the indicators, we need to see if there are any specific
@@ -293,9 +314,9 @@ plt.show()
                         style="width: 100%; height: 500px; border: none;"></iframe>
                     <figcaption>Figure 3. Average line graph of Unemployment, Inflation, Interest, SP500 (1968–2026)
                     </figcaption>
-                    <details style="margin-top: 10px; text-align: left; cursor: pointer;">
-                        <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
-                        <pre
+                    <!-- <details style="margin-top: 10px; text-align: left; cursor: pointer;"> -->
+                    <!-- <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary> -->
+                    <!-- <pre
                             style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># Trajectory 1968 
 scaled_1968 = df_1968.loc["1968":].copy()
 scaler_1968 = StandardScaler()
@@ -339,17 +360,39 @@ fig_1968.update_layout(
 
 fig_1968.write_html("economic_chart_1968.html", include_plotlyjs="cdn", full_html=True)
 fig_1968.show()
-</code></pre>
-                    </details>
+</code></pre> -->
+                    <!-- </details> -->
                     <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                         <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
-                        <p style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">The graph shows the average
-                            Z-score of Unemployment, Inflation, Interest rates, and SP500 across all recorded recessions
-                            from 1968 to 2026 in the 24 months leading up to their start, where a positive Z-score means
-                            the indicator was above its long-term average and a negative Z-score means it was below that
-                            long-term average. As per the graph, Interest rates and Inflation are consistently above
-                            their long-term averages throughout the entire 24-month window before a recession, making
-                            them the most reliable early warning signals.</p>
+                        <div style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">
+                            <p>The graph shows the average
+                                Z-score of Unemployment, Inflation, Interest rates, and SP500 across all recorded
+                                recessions
+                                from 1968 to 2026 in the 24 months leading up to their start, where a positive Z-score
+                                means
+                                the indicator was above its long-term average and a negative Z-score means it was below
+                                that
+                                long-term average. As per the graph, Interest rates and Inflation are consistently above
+                                their long-term averages throughout the entire 24-month window before a recession,
+                                making
+                                them the most reliable early warning signals.</p>
+                            <br>
+                            <strong>1968 Group (Macro indicators)</strong>
+                            <ul style="text-align: left; font-size: 0.9em; margin-top: 10px;">
+                                <li><strong>Unemployment (-18.2%)</strong> — Unemployment was nearly 20% below its
+                                    historical average before recessions. The labor market looked healthy, giving
+                                    little warning of an incoming downturn.</li>
+                                <li><strong>Inflation (+35.6%)</strong> — Inflation was running about 36% above
+                                    normal before recessions. Rising prices were a consistent early warning signal.
+                                </li>
+                                <li><strong>Interest (+47.5%)</strong> — Interest rates were almost 50% above their
+                                    long-run average. The Fed was actively tightening, which historically has
+                                    preceded recessions.</li>
+                                <li><strong>SP500 (-22.3%)</strong> — Stock prices were about 22% below their
+                                    historical average before recessions, suggesting markets were already pricing in
+                                    some weakness.</li>
+                            </ul>
+                        </div>
                     </details>
                 </figure>
 
@@ -358,9 +401,9 @@ fig_1968.show()
                         style="width: 100%; height: 500px; border: none;"></iframe>
                     <figcaption>Figure 4. Average line graph of VIX, Gold, and Oil (1988–2026)
                     </figcaption>
-                    <details style="margin-top: 10px; text-align: left; cursor: pointer;">
-                        <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary>
-                        <pre
+                    <!-- <details style="margin-top: 10px; text-align: left; cursor: pointer;"> -->
+                    <!-- <summary style="font-weight: bold; color: var(--link-color);">Show Code</summary> -->
+                    <!-- <pre
                             style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 0.85rem; text-align: left; cursor: auto; margin-top: 10px;"><code># Trajetory 1990
 scaled_1990 = df_1990.copy()
 indicators_1990 = ["Oil", "VIX", "Gold"]
@@ -406,19 +449,156 @@ fig_1990.update_layout(
 )
 
 fig_1990.write_html("economic_chart_1990.html", include_plotlyjs="cdn", full_html=True)
-fig_1990.show()</code></pre>
-                    </details>
+fig_1990.show()</code></pre> -->
+                    <!-- </details> -->
                     <details style="margin-top: 10px; text-align: left; cursor: pointer;">
                         <summary style="font-weight: bold; color: var(--link-color);">Description</summary>
-                        <p style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">The graph shows the average
-                            Z-score of Oil, VIX, and Gold across all recorded recessions from 1988 to 2026 in the 24
-                            months leading up to their start, where a positive Z-score means the indicator was above its
-                            long-term average and a negative Z-score means it was below that long-term average. As per
-                            the graph, VIX spikes dramatically in the final 3 months before a recession starts, driven
-                            largely by the extreme market fear seen during the 2008 financial crisis and the 2020 COVID
-                            recession.</p>
+                        <div style="margin-top: 10px; font-size: 0.95rem; cursor: auto;">
+                            <p>The graph shows the average
+                                Z-score of Oil, VIX, and Gold across all recorded recessions from 1988 to 2026 in the 24
+                                months leading up to their start, where a positive Z-score means the indicator was above
+                                its
+                                long-term average and a negative Z-score means it was below that long-term average. As
+                                per
+                                the graph, VIX spikes dramatically in the final 3 months before a recession starts,
+                                driven
+                                largely by the extreme market fear seen during the 2008 financial crisis and the 2020
+                                COVID
+                                recession.</p>
+                            <br>
+                            <strong>1990 Group (Financial/commodity indicators)</strong>
+                            <ul style="text-align: left; font-size: 0.9em; margin-top: 10px;">
+                                <li><strong>Oil (+0.7%)</strong> — Oil prices were essentially flat vs. their
+                                    long-run average before recessions — almost no predictive signal here.</li>
+                                <li><strong>VIX (-3.7%)</strong> — Market volatility was actually slightly below
+                                    average before recessions, meaning markets weren't particularly fearful in
+                                    advance. This is surprising and suggests VIX spikes during recessions rather
+                                    than before.</li>
+                                <li><strong>Gold (-16.7%)</strong> — Gold was about 17% below its historical average
+                                    pre-recession, suggesting investors weren't rushing to safe havens ahead of
+                                    time.</li>
+                            </ul>
+                        </div>
                     </details>
                 </figure>
+
+                <h4>How to interpret the graph</h4>
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>Overall Mean</th>
+                                <th>Overall Std</th>
+                                <th>Pre-Recession Mean (24m)</th>
+                                <th>Difference</th>
+                                <th>Difference (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Unemployment</strong></td>
+                                <td>6.031</td>
+                                <td>1.744</td>
+                                <td>4.936</td>
+                                <td>-1.095</td>
+                                <td>-18.2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Inflation</strong></td>
+                                <td>4.064</td>
+                                <td>2.796</td>
+                                <td>5.513</td>
+                                <td>1.449</td>
+                                <td>35.6</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Interest</strong></td>
+                                <td>5.095</td>
+                                <td>4.005</td>
+                                <td>7.513</td>
+                                <td>2.418</td>
+                                <td>47.5</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SP500</strong></td>
+                                <td>1026.648</td>
+                                <td>1116.438</td>
+                                <td>798.048</td>
+                                <td>-228.600</td>
+                                <td>-22.3</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Oil</strong></td>
+                                <td>51.956</td>
+                                <td>29.168</td>
+                                <td>52.335</td>
+                                <td>0.379</td>
+                                <td>0.7</td>
+                            </tr>
+                            <tr>
+                                <td><strong>VIX</strong></td>
+                                <td>19.497</td>
+                                <td>7.384</td>
+                                <td>18.769</td>
+                                <td>-0.728</td>
+                                <td>-3.7</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gold</strong></td>
+                                <td>115.069</td>
+                                <td>52.767</td>
+                                <td>95.907</td>
+                                <td>-19.162</td>
+                                <td>-16.7</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <details style="margin-top: 15px; margin-bottom: 25px; text-align: left; cursor: pointer;">
+                    <summary style="font-weight: bold; color: var(--link-color);">What does each column mean?</summary>
+                    <div style="margin-top: 10px; font-size: 0.95rem; cursor: auto; overflow-x: auto;">
+                        <p style="margin-bottom: 10px;">Using <strong>Unemployment</strong> as an example to interpret
+                            the table:</p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Value</th>
+                                    <th>Meaning</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Overall Mean = 6.031</strong></td>
+                                    <td>Average unemployment rate across all months from 1968–2026.<br><em>The typical
+                                            unemployment rate over the entire 58-year history.</em></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Overall Std = 1.744</strong></td>
+                                    <td>How much unemployment typically fluctuates around that 6.031%
+                                        average.<br><em>Unemployment usually swings about ±1.7% from the norm.</em></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pre-Recession Mean (24m) = 4.936</strong></td>
+                                    <td>Average unemployment rate looking at only the 24 months before each recession
+                                        starts.<br><em>When you zoom into just pre-recession windows, unemployment
+                                            averaged 4.9%.</em></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Difference = -1.095</strong></td>
+                                    <td>4.936 - 6.031 = -1.095.<br><em>Pre-recession unemployment was 1.1 percentage
+                                            points lower than the all-time average.</em></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Difference (%) = -18.2%</strong></td>
+                                    <td>-1.095 / 6.031 × 100 = -18.2%.<br><em>That gap represents an 18% drop relative
+                                            to the historical norm.</em></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </details>
 
                 <h3>3.2. Individual Indicator Changes Before Recession</h3>
 
