@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | Forecasting Recessions</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Chart.js for the interactive chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <%- include('partials/header') %>
+    <main>
+        <h1>Machine Learning Inference Service</h1>
+        <p style="text-align:center; color:#555; margin-bottom:2rem;">
+            Real-time recession probability using Model D (Macro + S&amp;P 500),
+            powered by the most recent available economic data.
+        </p>
+
+        <!-- ── Live Signal ──────────────────────────────────── -->
+        <% if (locals.prediction) { %>
+        <section>
+            <span class="step-label">Live Signal</span>
+            <h2>Current Recession Indicator</h2>
+            <div class="inference-layout">
+                <div class="live-signal-card <%= prediction.signal === 'HIGH' ? 'signal-high' : 'signal-low' %>">
+                    <div class="signal-month">As of <%= prediction.month %></div>
+                    <div class="signal-prob"><%= (prediction.recession_prob * 100).toFixed(1) %>%</div>
+                    <div class="signal-label">Recession Probability</div>
+                    <div class="signal-badge"><%= prediction.signal %> RISK</div>
+                    <div class="signal-lag-note">Latest complete data available</div>
+                </div>
+                <div class="inference-explainer">
+                    <h3>How to read this</h3>
+                    <ul>
+                        <li><b>Below 50%</b> — Economic conditions appear stable. No strong early-warning signals detected.</li>
+                        <li><b>Above 50%</b> — Patterns consistent with pre-recession conditions detected. Warning signal, not a confirmed recession.</li>
+                    </ul>
+                    <div class="inference-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Model</span>
+                            <span class="meta-value">Model D — Macro + S&amp;P 500</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Classifier</span>
+                            <span class="meta-value">Logistic Regression</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Alert threshold</span>
+                            <span class="meta-value">50% probability</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Training period</span>
+                            <span class="meta-value">1968–2008 (5 recessions)</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">ROC-AUC</span>
+                            <span class="meta-value">0.979</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="signal-note">
+                ⚠️ Research tool only — not financial advice.
+            </p>
+        </section>
+        <% } else { %>
+        <section>
+            <div class="api-unavailable">
+                <div class="unavailable-icon">⚠️</div>
+                <h2>Live Signal Unavailable</h2>
+                <p>The live prediction service could not be reached. Historical chart below is still available.</p>
+            </div>
+        </section>
+        <% } %>
+
+        <!-- ── Interactive Historical Chart ─────────────────── -->
+        <section>
+            <span class="step-label">Historical Analysis</span>
+            <h2>Recession Probability Over Time</h2>
+            <p>
+                Predicted recession probability across the test period using only data
+                available at that point in time. Red bands mark actual NBER recession periods.
+                Hover over the chart to inspect any month.
+            </p>
+
+            <!-- Model toggle buttons -->
+            <div class="model-toggle">
+                <button class="toggle-btn active" data-model="modelD">Model D — Macro + SP500</button>
+                <button class="toggle-btn" data-model="modelA">Model A — Macro</button>
+                <button class="toggle-btn" data-model="modelB">Model B — Financial</button>
+                <button class="toggle-btn" data-model="modelC">Model C — Combined</button>
+            </div>
+
+            <!-- Hovered month detail -->
+            <div class="chart-detail" id="chartDetail">
+                Hover over the chart to inspect a month
+            </div>
+
+            <div class="chart-wrapper">
+                <canvas id="probChart"></canvas>
+            </div>
+
+            <div class="chart-legend">
+                <span class="legend-item"><span class="legend-line" style="background:#2563eb"></span> Recession Probability</span>
+                <span class="legend-item"><span class="legend-box" style="background:rgba(220,38,38,0.15);border:1px solid #dc2626"></span> NBER Recession Period</span>
+                <span class="legend-item"><span class="legend-line" style="background:#000;border-top:2px dashed #000"></span> 50% Alert Threshold</span>
+            </div>
+        </section>
+
+        <!-- ── Input Indicators Table ────────────────────────── -->
+        <section>
+            <span class="step-label">Input Data</span>
+            <h2>Indicators Used for This Prediction</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Indicator</th>
+                        <th>Source</th>
+                        <th>Role in Model</th>
+                        <th>Feature Types</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Unemployment Rate</b></td>
+                        <td>FRED — UNRATE</td>
+                        <td>Lagging economic stress indicator</td>
+                        <td>Lag 3/6/9/12, Rolling mean/std, Momentum</td>
+                    </tr>
+                    <tr>
+                        <td><b>Inflation Rate</b></td>
+                        <td>FRED — FPCPITOTLZGUSA</td>
+                        <td>Price pressure signal</td>
+                        <td>Lag 3/6/9/12, Rolling mean/std, Momentum</td>
+                    </tr>
+                    <tr>
+                        <td><b>Federal Funds Rate</b></td>
+                        <td>FRED — DFF</td>
+                        <td>Monetary policy tightening signal</td>
+                        <td>Lag 3/6/9/12, Rolling mean/std, Momentum</td>
+                    </tr>
+                    <tr>
+                        <td><b>S&amp;P 500</b></td>
+                        <td>Alpha Vantage — SPY</td>
+                        <td>Leading market sentiment indicator</td>
+                        <td>Lag 3/6/9/12, Rolling mean/std, Momentum</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="data-note">
+                <strong>Note on S&amp;P 500 Data Source</strong>
+                <p>
+                    During model training and evaluation in Google Colab, S&amp;P 500 data was fetched 
+                    using <code>yfinance</code> (<code>^GSPC</code>). However, when deployed to 
+                    Google Cloud Run, <code>yfinance</code> consistently failed to return data,  
+                    returning empty results regardless of the date range or parameters used. 
+                    This is a known limitation of <code>yfinance</code> in server environments, 
+                    as it relies on scraping Yahoo Finance's web interface, which blocks or rate-limits 
+                    requests from cloud IP addresses.
+                </p>
+                <p>
+                    As a result, the live inference service uses <b>Alpha Vantage</b> (<code>SPY</code>) 
+                    as a reliable alternative for fetching monthly S&amp;P 500 data in production. 
+                    SPY is the S&amp;P 500 ETF and closely tracks the index, making it a suitable 
+                    substitute for live predictions.
+                </p>
+            </div>
+        </section>
+
+    </main>
+    <%- include('partials/footer') %>
+
+<style>
+    /* Model toggle */
+    .model-toggle {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+    .toggle-btn {
+        padding: 0.4rem 1rem;
+        border-radius: 6px;
+        border: 2px solid var(--primary-color);
+        background: #fff;
+        color: var(--primary-color);
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .toggle-btn:hover  { background: #eaf6f4; }
+    .toggle-btn.active { background: var(--primary-color); color: #fff; }
+
+    /* Hovered detail */
+    .chart-detail {
+        background: #f8fbfb;
+        border: 1px solid #d4ecea;
+        border-radius: 6px;
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        min-height: 2.2rem;
+    }
+
+    /* Chart */
+    .chart-wrapper {
+        position: relative;
+        height: 320px;
+        width: 100%;
+    }
+
+    /* Legend */
+    .chart-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 0.75rem;
+        font-size: 0.82rem;
+        color: #555;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+    .legend-line { display: inline-block; width: 24px; height: 3px; }
+    .legend-box  { display: inline-block; width: 16px; height: 16px; border-radius: 3px; }
+
+    /* Inference layout */
+    .inference-layout {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 2rem;
+        align-items: start;
+        margin: 1.5rem 0 1rem;
+    }
+    @media (max-width: 700px) {
+        .inference-layout { grid-template-columns: 1fr; }
+        .model-toggle { flex-direction: column; }
+    }
+    .inference-explainer h3 { margin-top: 0; color: var(--primary-color); }
+    .inference-explainer ul { padding-left: 1.2rem; margin-bottom: 1.25rem; }
+    .inference-explainer li { margin-bottom: 0.6rem; font-size: 0.95rem; }
+    .inference-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem 1.5rem;
+        background: #f8fbfb;
+        border: 1px solid #d4ecea;
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+    }
+    .meta-item { display: flex; flex-direction: column; }
+    .meta-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #888; font-weight: 600; }
+    .meta-value { font-size: 0.9rem; font-weight: 600; color: var(--primary-color); }
+    .api-unavailable { text-align: center; padding: 3rem 2rem; color: #666; }
+    .unavailable-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .step-label {
+        display: inline-block;
+        background: var(--primary-color);
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<script>
+// ── Recession periods (NBER) ──────────────────────────────────
+const RECESSIONS = [
+    { start: "2007-12", end: "2009-06" },
+    { start: "2020-02", end: "2020-04" },
+];
+
+// ── Model colors ──────────────────────────────────────────────
+const MODEL_COLORS = {
+    modelA: "#2563eb",
+    modelB: "#dc2626",
+    modelC: "#16a34a",
+    modelD: "#7c3aed",
+};
+
+const MODEL_LABELS = {
+    modelA: "Model A — Macro",
+    modelB: "Model B — Financial",
+    modelC: "Model C — Combined",
+    modelD: "Model D — Macro + SP500",
+};
+
+let allData   = null;
+let chart     = null;
+let activeModel = "modelD";
+
+// ── Load predictions.json ────────────────────────────────────
+async function loadData() {
+    try {
+        const res  = await fetch("/data/predictions.json");
+        allData    = await res.json();
+        buildChart(activeModel);
+    } catch (e) {
+        console.error("Could not load predictions.json:", e);
+        document.querySelector(".chart-wrapper").innerHTML =
+            '<p style="text-align:center;color:#888;padding:2rem">Historical data not available.</p>';
+    }
+}
+
+// ── Build recession background bands ─────────────────────────
+function recessionAnnotations(labels) {
+    const bands = [];
+    RECESSIONS.forEach(r => {
+        const si = labels.indexOf(r.start);
+        const ei = labels.indexOf(r.end);
+        if (si === -1 || ei === -1) return;
+        // draw as a filled dataset with no interaction
+        bands.push({ si, ei });
+    });
+    return bands;
+}
+
+// ── Build / update chart ──────────────────────────────────────
+function buildChart(modelKey) {
+    if (!allData || !allData[modelKey]) return;
+
+    const raw    = allData[modelKey];
+    const labels = raw.map(d => d.date);
+    const probs  = raw.map(d => d.prob);
+    const color  = MODEL_COLORS[modelKey];
+
+    // ── FIXED — clamps band to available label range ──
+const recessionPlugin = {
+    id: "recessionBands",
+    beforeDraw(chart) {
+        const { ctx, chartArea, scales } = chart;
+        if (!chartArea) return;
+
+        RECESSIONS.forEach(r => {
+            // Find exact index or clamp to nearest available date
+            let si = labels.indexOf(r.start);
+            let ei = labels.indexOf(r.end);
+
+            // If start is before chart range, clamp to first label
+            if (si === -1) {
+                const startIsBeforeChart = r.start < labels[0];
+                if (startIsBeforeChart) {
+                    si = 0;   // recession started before our data — begin at chart edge
+                } else {
+                    return;   // start is after chart range — skip entirely
+                }
+            }
+
+            // If end is after chart range, clamp to last label
+            if (ei === -1) {
+                const endIsAfterChart = r.end > labels[labels.length - 1];
+                if (endIsAfterChart) {
+                    ei = labels.length - 1;
+                } else {
+                    return;   // end is before chart range — skip entirely
+                }
+            }
+
+            const x1 = scales.x.getPixelForValue(si);
+            const x2 = scales.x.getPixelForValue(ei);
+            ctx.save();
+            ctx.fillStyle = "rgba(220,38,38,0.12)";
+            ctx.fillRect(x1, chartArea.top, x2 - x1, chartArea.height);
+            ctx.strokeStyle = "rgba(220,38,38,0.35)";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x1, chartArea.top, x2 - x1, chartArea.height);
+            ctx.restore();
+        });
+    }
+};
+
+    const config = {
+        type: "line",
+        data: {
+            labels,
+            datasets: [
+                // 50% threshold line
+                {
+                    label: "Threshold",
+                    data: labels.map(() => 0.5),
+                    borderColor: "rgba(0,0,0,0.4)",
+                    borderWidth: 1,
+                    borderDash: [6, 4],
+                    pointRadius: 0,
+                    fill: false,
+                    tension: 0,
+                },
+                // Probability curve
+                {
+                    label: MODEL_LABELS[modelKey],
+                    data: probs,
+                    borderColor: color,
+                    backgroundColor: color + "20",
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: color,
+                    fill: true,
+                    tension: 0.3,
+                },
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        title: ctx => `Month: ${ctx[0].label}`,
+                        label: ctx => {
+                            if (ctx.datasetIndex === 0) return null;
+                            const pct = (ctx.raw * 100).toFixed(1);
+                            const sig = ctx.raw >= 0.5 ? "⚠ HIGH RISK" : "✓ LOW RISK";
+                            return [`Probability: ${pct}%`, sig];
+                        }
+                    },
+                    filter: item => item.datasetIndex !== 0,
+                    backgroundColor: "#1e3a3a",
+                    titleColor: "#e2f4f2",
+                    bodyColor: "#e2f4f2",
+                    padding: 10,
+                    displayColors: false,
+                },
+            },
+            onHover: (event, elements) => {
+                const detail = document.getElementById("chartDetail");
+                if (!elements.length) {
+                    detail.textContent = "Hover over the chart to inspect a month";
+                    return;
+                }
+                const idx  = elements[0].index;
+                const date = labels[idx];
+                const prob = (probs[idx] * 100).toFixed(1);
+                const risk = probs[idx] >= 0.5 ? "⚠ HIGH RISK" : "✓ LOW RISK";
+                detail.innerHTML =
+                    `<b>${date}</b> — Recession Probability: <b>${prob}%</b> &nbsp; ${risk}`;
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        maxTicksLimit: 10,
+                        color: "#666",
+                        font: { size: 11 },
+                    },
+                    grid: { color: "rgba(0,0,0,0.05)" },
+                },
+                y: {
+                    min: 0,
+                    max: 1,
+                    ticks: {
+                        callback: v => (v * 100) + "%",
+                        color: "#666",
+                        font: { size: 11 },
+                    },
+                    grid: { color: "rgba(0,0,0,0.07)" },
+                    title: {
+                        display: true,
+                        text: "P(Recession)",
+                        color: "#555",
+                        font: { size: 12 },
+                    }
+                }
+            }
+        },
+        plugins: [recessionPlugin]
+    };
+
+    if (chart) {
+        chart.destroy();
+    }
+    const ctx = document.getElementById("probChart").getContext("2d");
+    chart = new Chart(ctx, config);
+}
+
+// ── Toggle buttons ────────────────────────────────────────────
+document.querySelectorAll(".toggle-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeModel = btn.dataset.model;
+        buildChart(activeModel);
+    });
+});
+
+// ── Init ──────────────────────────────────────────────────────
+loadData();
+</script>
+
+</body>
+</html>
