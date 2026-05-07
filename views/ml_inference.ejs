@@ -18,18 +18,22 @@
         </p>
 
         <!-- ── Live Signal ──────────────────────────────────── -->
-        <% if (locals.prediction) { %>
         <section>
             <span class="step-label">Live Signal</span>
             <h2>Current Recession Indicator</h2>
             <div class="inference-layout">
-                <div class="live-signal-card <%= prediction.signal === 'HIGH' ? 'signal-high' : 'signal-low' %>">
-                    <div class="signal-month">As of <%= prediction.month %></div>
-                    <div class="signal-prob"><%= (prediction.recession_prob * 100).toFixed(1) %>%</div>
+
+                <!-- Signal card — filled by JS -->
+                <div class="live-signal-card signal-loading" id="signalCard">
+                    <div class="signal-month" id="signalMonth">Loading...</div>
+                    <div class="signal-prob" id="signalProb">
+                        <span class="loading-spinner"></span>
+                    </div>
                     <div class="signal-label">Recession Probability</div>
-                    <div class="signal-badge"><%= prediction.signal %> RISK</div>
+                    <div class="signal-badge" id="signalBadge">—</div>
                     <div class="signal-lag-note">Latest complete data available</div>
                 </div>
+
                 <div class="inference-explainer">
                     <h3>How to read this</h3>
                     <ul>
@@ -64,15 +68,6 @@
                 ⚠️ Research tool only — not financial advice.
             </p>
         </section>
-        <% } else { %>
-        <section>
-            <div class="api-unavailable">
-                <div class="unavailable-icon">⚠️</div>
-                <h2>Live Signal Unavailable</h2>
-                <p>The live prediction service could not be reached. Historical chart below is still available.</p>
-            </div>
-        </section>
-        <% } %>
 
         <!-- ── Interactive Historical Chart ─────────────────── -->
         <section>
@@ -490,9 +485,42 @@ document.querySelectorAll(".toggle-btn").forEach(btn => {
     });
 });
 
-// ── Init ──────────────────────────────────────────────────────
-loadData();
-</script>
+// ── Fetch live prediction client-side ────────────────────────  ← ADD FROM HERE
+const CLOUD_RUN_URL = "https://recession-model-413903143998.us-central1.run.app";
 
-</body>
-</html>
+async function loadPrediction() {
+    const card  = document.getElementById("signalCard");
+    const month = document.getElementById("signalMonth");
+    const prob  = document.getElementById("signalProb");
+    const badge = document.getElementById("signalBadge");
+
+    try {
+        const res  = await fetch(`${CLOUD_RUN_URL}/predict`);
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.detail || "API error");
+
+        const pct  = (data.recession_prob * 100).toFixed(1);
+        const high = data.signal === "HIGH";
+
+        card.classList.remove("signal-loading");
+        card.classList.add(high ? "signal-high" : "signal-low");
+
+        month.textContent = `As of ${data.month}`;
+        prob.textContent  = `${pct}%`;
+        badge.textContent = `${data.signal} RISK`;
+
+    } catch (err) {
+        console.error("Prediction failed:", err);
+        card.classList.remove("signal-loading");
+        card.classList.add("signal-error");
+        month.textContent = "Unavailable";
+        prob.innerHTML    = "⚠️";
+        badge.textContent = "Service Error";
+    }
+}
+
+// ── Init both on page load ────────────────────────────────────  ← REPLACE old "// ── Init ──" block
+loadPrediction();   // live signal — fetches from Cloud Run in background
+loadData();         // historical chart — loads from static JSON immediately
+</script>             // ← this closing tag is already there, don't add another one
