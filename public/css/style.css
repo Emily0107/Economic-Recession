@@ -201,3 +201,134 @@ table tr:nth-of-type(even) {
 .zscore-highlight li:last-child {
   margin-bottom: 0;
 }
+
+/* ── Live Signal Widget ── */
+.live-signal-card {
+  display: inline-block;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  text-align: center;
+  margin: 1rem 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.signal-high { background: #fef2f2; border: 2px solid #dc2626; }
+.signal-low  { background: #f0fdf4; border: 2px solid #16a34a; }
+
+.signal-month { font-size: 0.85rem; color: #666; margin-bottom: 0.5rem; }
+
+.signal-prob {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.signal-high .signal-prob { color: #dc2626; }
+.signal-low  .signal-prob { color: #16a34a; }
+
+.signal-label { font-size: 0.9rem; color: #555; margin-bottom: 0.75rem; }
+
+.signal-badge {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+.signal-high .signal-badge { background: #dc2626; }
+.signal-low  .signal-badge { background: #16a34a; }
+
+.signal-note {
+  font-size: 0.82rem;
+  color: #666;
+  margin-top: 0.75rem;
+  max-width: 500px;
+}
+
+.signal-lag-note {
+    font-size: 0.72rem;
+    color: #888;
+    margin-top: 0.4rem;
+}
+
+/* Loading state */
+.signal-loading {
+    background: #f8fbfb;
+    border: 2px solid #d4ecea;
+}
+
+.signal-loading .signal-prob {
+    color: #aaa;
+}
+
+.signal-loading .signal-month {
+    color: #aaa;
+}
+
+/* Spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: 4px solid #e2e8f0;
+    border-top-color: var(--secondary-color);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    margin: 0.5rem 0;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Error state */
+.signal-error {
+    background: #fff7ed;
+    border: 2px solid #f59e0b;
+}
+
+.signal-error .signal-prob {
+    font-size: 2rem;
+    color: #92400e;
+}
+
+/* ── Signal badge colors for all states ── */
+.signal-low .signal-badge  { background: #16a34a; }
+.signal-high .signal-badge { background: #dc2626; }
+.signal-loading .signal-badge {
+    background: #94a3b8;
+    color: #fff;
+}
+.signal-error .signal-badge {
+    background: #f59e0b;
+    color: #fff;
+}
+
+/* ── Data note (yfinance explanation box) ── */
+.data-note {
+    background: #eaf6f4;
+    border-left: 4px solid var(--secondary-color);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-top: 1rem;
+    font-size: 0.88rem;
+    color: #78350f;
+}
+.data-note strong {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+}
+.data-note p {
+    margin: 0 0 0.5rem 0;
+}
+.data-note p:last-child {
+    margin-bottom: 0;
+}
+.data-note code {
+    background: #d4ede9;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    font-family: monospace;
+}

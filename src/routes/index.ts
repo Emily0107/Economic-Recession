@@ -18,6 +18,10 @@ router.get('/ml-models', (req: Request, res: Response) => {
     res.render('ml_models', { title: 'Machine Learning Models' });
 });
 
+router.get('/ml-inference', (req: Request, res: Response) => {
+    res.render('ml_inference', { title: 'ML Inference' });
+});
+
 router.get('/major-findings', (req: Request, res: Response) => {
     res.render('major_findings', { title: 'Major Findings' });
 });
